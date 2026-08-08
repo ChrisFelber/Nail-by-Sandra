@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f1ed">
+<title>Nails by Sandra — Prototype</title>
+<style>
+:root{
+  --bg:#f8f4f1;--card:#fffdfb;--ink:#302a29;--muted:#857a77;
+  --rose:#b9827c;--rose-dark:#95655f;--line:#e9dfda;--green:#708875;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);
+font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}.app{min-height:100vh}
+header{height:72px;background:rgba(255,253,251,.92);border-bottom:1px solid var(--line);
+display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5}
+.brand{font-family:Georgia,serif;font-size:24px}.brand span{color:var(--rose)}
+.nav{display:flex;gap:8px}.nav button,.mode{border:0;background:transparent;padding:10px 14px;border-radius:12px;color:var(--muted)}
+.nav button.active,.nav button:hover{background:#f1e7e3;color:var(--ink)}
+main{max-width:1180px;margin:auto;padding:42px 24px 80px}.hero{display:grid;grid-template-columns:1.2fr .8fr;
+gap:38px;align-items:center;padding:35px 0 55px}.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:12px;color:var(--rose-dark)}
+h1{font:500 clamp(44px,6vw,76px)/1.02 Georgia,serif;margin:14px 0 20px;max-width:720px}
+h2{font:500 34px Georgia,serif;margin:0 0 20px}.lead{font-size:18px;line-height:1.7;color:var(--muted);max-width:600px}
+.btn{border:0;border-radius:14px;padding:14px 20px;background:var(--ink);color:white;font-weight:600}
+.btn.secondary{background:#eee3df;color:var(--ink)}.actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.hero-art{height:420px;border-radius:34px;background:linear-gradient(145deg,#e7d3cc,#cba9a1);
+display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.hero-art:before{content:"";width:230px;height:300px;border-radius:120px 120px 40px 40px;background:#f7e7df;
+transform:rotate(9deg);box-shadow:40px 20px 0 rgba(255,255,255,.25)}
+.hero-art:after{content:"✦";position:absolute;font-size:72px;color:#fff;opacity:.8}
+.section{margin-top:30px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px}
+.service{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.service h3{margin:0 0 7px;font-size:18px}
+.muted{color:var(--muted);font-size:14px;line-height:1.5}.price{font-weight:700;white-space:nowrap}
+.dashboard{display:none}.dashboard.show{display:block}.public.hide{display:none}
+.topline{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:25px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stat strong{display:block;font-size:28px;margin-top:8px}
+.calendar{display:grid;grid-template-columns:90px repeat(5,1fr);overflow:hidden}.calendar>div{border-right:1px solid var(--line);border-bottom:1px solid var(--line);min-height:72px;padding:10px}
+.calhead{font-weight:700;background:#faf6f4}.slot{background:#f2e3df;border-radius:12px;padding:9px;margin:2px;color:#5b403c}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:15px 8px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+.pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#e5eee6;color:#49604e;font-size:12px}
+footer{text-align:center;color:var(--muted);font-size:13px;margin-top:50px}
+@media(max-width:800px){header{padding:0 16px}.nav{display:none}main{padding:25px 16px 60px}.hero{grid-template-columns:1fr}.hero-art{height:280px}.grid,.stats{grid-template-columns:1fr 1fr}.calendar{grid-template-columns:55px repeat(5,1fr);font-size:12px}.calendar>div{padding:6px;min-height:65px}}
+@media(max-width:520px){.grid,.stats{grid-template-columns:1fr}.topline{align-items:flex-start;flex-direction:column}.brand{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand">Nails <span>by Sandra</span></div>
+  <nav class="nav" id="publicNav">
+    <button class="active" onclick="showPublic('home',this)">Home</button>
+    <button onclick="showPublic('services',this)">Services</button>
+    <button onclick="showPublic('booking',this)">Book</button>
+  </nav>
+  <button class="mode" onclick="toggleDashboard()">Owner login</button>
+</header>
+
+<main>
+<section class="public" id="home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Nail studio · Swiss beauty</div>
+      <h1>Beautiful nails, made for you.</h1>
+      <p class="lead">A calm, personal nail experience with beautifully finished manicures, gel services and nail art.</p>
+      <div class="actions"><button class="btn" onclick="showPublic('booking')">Book an appointment</button><button class="btn secondary" onclick="showPublic('services')">View services</button></div>
+    </div>
+    <div class="hero-art"></div>
+  </div>
+  <div class="section">
+    <div class="eyebrow">Popular services</div><h2>Choose your treatment</h2>
+    <div class="grid">
+      <div class="card service"><div><h3>Gel Manicure</h3><div class="muted">60 min · long-lasting finish</div></div><div class="price">CHF 75</div></div>
+      <div class="card service"><div><h3>Nail Extensions</h3><div class="muted">90 min · elegant extensions</div></div><div class="price">CHF 120</div></div>
+      <div class="card service"><div><h3>Nail Art</h3><div class="muted">30 min · creative details</div></div><div class="price">CHF 35</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="public hide" id="services">
+  <div class="eyebrow">Services</div><h2>Simple, beautiful treatments</h2>
+  <div class="grid">
+    <div class="card"><div class="service"><div><h3>Classic Manicure</h3><div class="muted">45 minutes<br>Cuticle care, shaping and polish.</div></div><div class="price">CHF 55</div></div></div>
+    <div class="card"><div class="service"><div><h3>Gel Manicure</h3><div class="muted">60 minutes<br>Preparation, gel colour and finish.</div></div><div class="price">CHF 75</div></div></div>
+    <div class="card"><div class="service"><div><h3>Nail Extensions</h3><div class="muted">90 minutes<br>Extension, shaping and gel finish.</div></div><div class="price">CHF 120</div></div></div>
+    <div class="card"><div class="service"><div><h3>Nail Art</h3><div class="muted">30 minutes<br>Custom designs and details.</div></div><div class="price">CHF 35</div></div></div>
+  </div>
+</section>
+
+<section class="public hide" id="booking">
+  <div class="eyebrow">Online booking</div><h2>Book your appointment</h2>
+  <div class="card" style="max-width:720px">
+    <p><strong>1. Choose a service</strong></p>
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+      <button class="btn secondary" onclick="selectService(this)">Gel Manicure · CHF 75</button>
+      <button class="btn secondary" onclick="selectService(this)">Nail Extensions · CHF 120</button>
+    </div>
+    <p style="margin-top:28px"><strong>2. Choose a time</strong></p>
+    <div class="grid" style="grid-template-columns:repeat(3,1fr)">
+      <button class="btn secondary">09:00</button><button class="btn secondary">10:30</button><button class="btn secondary">13:00</button>
+      <button class="btn secondary">14:30</button><button class="btn secondary">16:00</button><button class="btn secondary">17:30</button>
+    </div>
+    <div class="actions"><button class="btn" onclick="alert('Prototype: booking confirmed!')">Confirm appointment</button></div>
+  </div>
+</section>
+
+<section class="dashboard" id="dashboard">
+  <div class="topline"><div><div class="eyebrow">Owner dashboard</div><h2>Good evening, Sandra</h2></div><button class="btn" onclick="alert('Prototype: new appointment')">+ New appointment</button></div>
+  <div class="stats">
+    <div class="card"><div class="muted">Today's appointments</div><strong>6</strong></div>
+    <div class="card"><div class="muted">Today's revenue</div><strong>CHF 420</strong></div>
+    <div class="card"><div class="muted">This month</div><strong>CHF 4'820</strong></div>
+    <div class="card"><div class="muted">Outstanding</div><strong>CHF 180</strong></div>
+  </div>
+  <div class="section card">
+    <div class="topline"><h2 style="font-size:26px;margin:0">Today's calendar</h2><span class="pill">6 appointments</span></div>
+    <div class="calendar">
+      <div class="calhead">Time</div><div class="calhead">Mon</div><div class="calhead">Tue</div><div class="calhead">Wed</div><div class="calhead">Thu</div><div class="calhead">Fri</div>
+      <div>09:00</div><div></div><div class="slot">Anna<br><small>Gel · CHF 75</small></div><div></div><div></div><div></div>
+      <div>10:30</div><div></div><div></div><div class="slot">Sophie<br><small>Extensions · CHF 120</small></div><div></div><div></div>
+      <div>13:00</div><div></div><div></div><div></div><div class="slot">Laura<br><small>Manicure · CHF 55</small></div><div></div>
+      <div>15:00</div><div></div><div></div><div></div><div></div><div class="slot">Julie<br><small>Nail art · CHF 35</small></div>
+    </div>
+  </div>
+  <div class="section grid" style="grid-template-columns:1.3fr .7fr">
+    <div class="card"><div class="topline"><h2 style="font-size:26px;margin:0">Recent transactions</h2><span class="pill">Auto-synced</span></div>
+      <table><tr><th>Date</th><th>Description</th><th>Type</th><th>Amount</th></tr>
+      <tr><td>08.08</td><td>Gel manicure · Anna</td><td>Revenue</td><td>+CHF 75</td></tr>
+      <tr><td>08.08</td><td>Nail supplies</td><td>Expense</td><td>−CHF 48</td></tr>
+      <tr><td>07.08</td><td>Nail extensions · Sophie</td><td>Revenue</td><td>+CHF 120</td></tr></table>
+    </div>
+    <div class="card"><div class="eyebrow">August 2026</div><h2 style="font-size:26px">CHF 4'080</h2><div class="muted">Estimated profit after recorded expenses</div>
+      <div style="margin-top:25px;height:100px;border-bottom:2px solid #d6c5bf;position:relative"><svg viewBox="0 0 300 100" width="100%" height="100%" preserveAspectRatio="none"><polyline points="0,85 45,72 90,76 135,50 180,60 225,28 300,12" fill="none" stroke="#b9827c" stroke-width="4"/></svg></div>
+    </div>
+  </div>
+</section>
+<footer>Nails by Sandra · Prototype v0.1</footer>
+</main>
+</div>
+<script>
+function showPublic(id,btn){
+ document.querySelectorAll('.public').forEach(x=>x.classList.add('hide'));
+ document.getElementById(id).classList.remove('hide');
+ document.getElementById('dashboard').classList.remove('show');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+}
+function toggleDashboard(){
+ document.querySelectorAll('.public').forEach(x=>x.classList.add('hide'));
+ document.getElementById('dashboard').classList.add('show');
+ document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));
+}
+function selectService(btn){
+ document.querySelectorAll('#booking .btn.secondary').forEach(x=>x.style.outline='none');
+ btn.style.outline='2px solid #95655f';
+}
+</script>
+</body></html>
