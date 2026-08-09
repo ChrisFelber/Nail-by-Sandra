@@ -31,9 +31,9 @@
 
     <div class="stats">
       <div class="stat"><small>Rendez-vous aujourd'hui</small><strong id="statToday">—</strong></div>
-      <div class="stat"><small>Cette semaine</small><strong id="statWeek">—</strong></div>
-      <div class="stat"><small>Chiffre prévu</small><strong id="statRevenue">—</strong></div>
-      <div class="stat"><small>Prochain rendez-vous</small><strong id="statNext">—</strong></div>
+      <div class="stat"><small>Rendez-vous cette semaine</small><strong id="statWeek">—</strong></div>
+      <div class="stat"><small>CA prévu cette semaine</small><strong id="statRevenue">—</strong></div>
+      <div class="stat"><small>Clientes à venir</small><strong id="statClients">—</strong></div>
     </div>
 
     <div class="grid">
@@ -51,7 +51,7 @@ async function logout(){await fetch('/api/admin-logout',{method:'POST',credentia
 function localParts(value){const d=new Date(value);const parts=Object.fromEntries(new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',weekday:'short',hourCycle:'h23'}).formatToParts(d).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));return parts}
 function isoLocalDay(value){const p=localParts(value);return `${p.year}-${p.month}-${p.day}`}
 function todayLocal(){return isoLocalDay(new Date())}
-function startOfWeekLocal(){const now=new Date();const day=Number(new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short'}).format(now)==='Sun'?7:['Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short'}).format(now))+1);const copy=new Date(now);copy.setUTCDate(copy.getUTCDate()-(day-1));return isoLocalDay(copy)}
+function startOfWeekLocal(){const now=new Date();const wd=new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short'}).format(now);const day=wd==='Sun'?7:['Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(wd)+1;const copy=new Date(now);copy.setUTCDate(copy.getUTCDate()-(day-1));return isoLocalDay(copy)}
 function endOfWeekLocal(){const s=new Date(startOfWeekLocal()+'T12:00:00Z');s.setUTCDate(s.getUTCDate()+6);return isoLocalDay(s)}
 function serviceName(summary){return String(summary||'Rendez-vous').replace(/^Nail by Sandra\s*[—-]\s*/i,'')}
 function field(desc,label){const m=String(desc||'').match(new RegExp('^'+label+'\\s*:\\s*(.+)$','mi'));return m?m[1].trim():''}
@@ -61,7 +61,7 @@ function phone(desc){return field(desc,'Téléphone')}
 function formatMoney(n){return new Intl.NumberFormat('fr-CH',{style:'currency',currency:'CHF',maximumFractionDigits:0}).format(n)}
 function fmtDate(value){return new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,weekday:'short',day:'2-digit',month:'2-digit'}).format(new Date(value))}
 function fmtTime(value){return new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(value))}
-function render(events){const today=todayLocal();const weekStart=startOfWeekLocal();const weekEnd=endOfWeekLocal();const todayEvents=events.filter(e=>isoLocalDay(e.start)===today);const weekEvents=events.filter(e=>{const d=isoLocalDay(e.start);return d>=weekStart&&d<=weekEnd});document.getElementById('statToday').textContent=todayEvents.length;document.getElementById('statWeek').textContent=weekEvents.length;document.getElementById('statRevenue').textContent=formatMoney(weekEvents.reduce((s,e)=>s+priceNumber(e.description),0));document.getElementById('statNext').textContent=events[0]?fmtTime(events[0].start):'—';
+function render(events){const today=todayLocal();const weekStart=startOfWeekLocal();const weekEnd=endOfWeekLocal();const todayEvents=events.filter(e=>isoLocalDay(e.start)===today);const weekEvents=events.filter(e=>{const d=isoLocalDay(e.start);return d>=weekStart&&d<=weekEnd});const upcomingClients=new Set(events.map(e=>customerName(e.description).trim().toLowerCase()).filter(Boolean));document.getElementById('statToday').textContent=todayEvents.length;document.getElementById('statWeek').textContent=weekEvents.length;document.getElementById('statRevenue').textContent=formatMoney(weekEvents.reduce((s,e)=>s+priceNumber(e.description),0));document.getElementById('statClients').textContent=upcomingClients.size;
 const appointments=document.getElementById('appointments');if(!events.length){appointments.className='empty';appointments.textContent='Aucun rendez-vous à venir.'}else{appointments.className='';appointments.innerHTML=events.map(e=>`<div class="appointment"><div class="dateblock"><strong>${fmtDate(e.start)}</strong><span>${fmtTime(e.start)}–${fmtTime(e.end)}</span></div><div class="appt-main"><strong>${escapeHtml(customerName(e.description))}</strong><p>${escapeHtml(serviceName(e.summary))}${phone(e.description)?'\n'+escapeHtml(phone(e.description)):''}</p></div><div class="price">${priceNumber(e.description)?formatMoney(priceNumber(e.description)):''}</div></div>`).join('')}
 const next=document.getElementById('nextAppointment');if(events[0])next.innerHTML=`<div class="next-card"><strong>${escapeHtml(customerName(events[0].description))}</strong><span>${escapeHtml(serviceName(events[0].summary))}<br>${fmtDate(events[0].start)} à ${fmtTime(events[0].start)}</span></div>`;else next.innerHTML='<div class="empty">Aucun rendez-vous.</div>';
 const todayList=document.getElementById('todayList');todayList.innerHTML=todayEvents.length?todayEvents.map(e=>`<div class="mini"><strong>${fmtTime(e.start)} · ${escapeHtml(customerName(e.description))}</strong><span>${escapeHtml(serviceName(e.summary))}</span></div>`).join(''):'<div class="muted">Aucun autre rendez-vous aujourd’hui.</div>'}
