@@ -19,6 +19,8 @@ function getServiceAccount() {
   if (!account.client_email || !account.private_key) {
     throw new Error('Le compte de service Google est incomplet.');
   }
+
+  account.private_key = account.private_key.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
   return account;
 }
 
@@ -55,14 +57,14 @@ async function getAccessToken() {
 
   const data = await response.json();
   if (!response.ok || !data.access_token) {
-    throw new Error(data.error_description || data.error || 'Impossible d’obtenir le jeton Google.');
+    throw new Error(`AUTH_${response.status}: ${data.error_description || data.error || 'Impossible d’obtenir le jeton Google.'}`);
   }
   return data.access_token;
 }
 
 function getCalendarId() {
   const id = process.env.GOOGLE_CALENDAR_ID;
-  if (!id) throw new Error('GOOGLE_CALENDAR_ID manquant.');
+  if (!id) throw new Error('CALENDAR_ID_MISSING');
   return id;
 }
 
@@ -105,7 +107,9 @@ export default async function handler(req, res) {
       });
 
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error?.message || 'Erreur Google Calendar.');
+      if (!response.ok) {
+        throw new Error(`CALENDAR_${response.status}: ${data.error?.message || 'Erreur Google Calendar.'}`);
+      }
 
       return json(res, 200, {
         timeZone: TIME_ZONE,
@@ -115,9 +119,7 @@ export default async function handler(req, res) {
 
     const { summary, description, start, end, customer } = req.body || {};
     if (!summary || !start || !end || !customer?.email) {
-      return json(res, 400, {
-        error: 'Informations de réservation incomplètes.'
-      });
+      return json(res, 400, { error: 'Informations de réservation incomplètes.' });
     }
 
     const event = {
@@ -141,18 +143,17 @@ export default async function handler(req, res) {
     );
 
     const data = await response.json();
-    if (!response.ok) throw new Error(data.error?.message || 'Impossible de créer le rendez-vous.');
+    if (!response.ok) {
+      throw new Error(`EVENT_${response.status}: ${data.error?.message || 'Impossible de créer le rendez-vous.'}`);
+    }
 
-    return json(res, 201, {
-      success: true,
-      eventId: data.id,
-      htmlLink: data.htmlLink
-    });
+    return json(res, 201, { success: true, eventId: data.id, htmlLink: data.htmlLink });
   } catch (error) {
     console.error('Google Calendar:', error);
     return json(res, 500, {
       error: 'La connexion à Google Calendar a échoué.',
-      code: 'GOOGLE_CALENDAR_ERROR'
+      code: 'GOOGLE_CALENDAR_ERROR',
+      diagnostic: error?.message || 'Erreur inconnue.'
     });
   }
 }
