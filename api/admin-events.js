@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { isAuthenticated } from './_admin-auth.js';
+import { isAuthenticated } from '../lib/admin-auth.js';
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
