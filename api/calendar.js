@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { sendGmailToSelf } from './_gmail.js';
+import { sendGmailToSelf } from '../lib/gmail.js';
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
