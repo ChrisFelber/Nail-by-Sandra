@@ -1,4 +1,4 @@
-import { isAuthenticated } from './_admin-auth.js';
+import { isAuthenticated } from '../lib/admin-auth.js';
 
 function b64url(value){return Buffer.from(value,'utf8').toString('base64').replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_')}
 function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v||''))}
