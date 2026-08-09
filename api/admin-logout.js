@@ -1,4 +1,4 @@
-import { clearSessionCookie } from './_admin-auth.js';
+import { clearSessionCookie } from '../lib/admin-auth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
