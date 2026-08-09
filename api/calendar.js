@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
 const TIME_ZONE = 'Europe/Zurich';
+const SLOT_STARTS = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00'];
 
 function base64Url(value) {
   return Buffer.from(value).toString('base64')
@@ -11,42 +12,37 @@ function base64Url(value) {
     .replace(/\//g, '_');
 }
 
-function getServiceAccount() {
-  const base64Raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64;
-  const jsonRaw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-
-  if (!base64Raw && !jsonRaw) {
-    throw new Error('SERVICE_ACCOUNT_JSON_MISSING');
-  }
-
-  let raw = jsonRaw;
-  if (base64Raw) {
-    try {
-      raw = Buffer.from(base64Raw.trim(), 'base64').toString('utf8');
-    } catch {
-      throw new Error('SERVICE_ACCOUNT_JSON_BASE64_INVALID');
-    }
-  }
-
-  let account;
+function parseServiceAccount(raw) {
   try {
-    account = JSON.parse(raw);
+    const account = JSON.parse(raw);
+    if (!account.client_email || !account.private_key) {
+      throw new Error('Champs client_email/private_key manquants.');
+    }
+    account.private_key = account.private_key.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
+    return account;
   } catch {
     throw new Error('SERVICE_ACCOUNT_JSON_INVALID');
   }
+}
 
-  if (!account.client_email || !account.private_key) {
-    throw new Error('SERVICE_ACCOUNT_JSON_INCOMPLETE');
+function getServiceAccount() {
+  const rawBase64 = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64;
+  if (rawBase64) {
+    try {
+      return parseServiceAccount(Buffer.from(rawBase64.trim(), 'base64').toString('utf8'));
+    } catch (error) {
+      if (error.message !== 'SERVICE_ACCOUNT_JSON_INVALID') throw error;
+    }
   }
 
-  account.private_key = account.private_key.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
-  return account;
+  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  if (!raw) throw new Error('SERVICE_ACCOUNT_MISSING');
+  return parseServiceAccount(raw.trim());
 }
 
 async function getAccessToken() {
   const account = getServiceAccount();
   const now = Math.floor(Date.now() / 1000);
-
   const header = base64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claim = base64Url(JSON.stringify({
     iss: account.client_email,
@@ -93,6 +89,71 @@ function json(res, status, body) {
   return res.status(status).json(body);
 }
 
+function validDate(value) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(value || '');
+}
+
+function validTime(value) {
+  return /^\d{2}:\d{2}$/.test(value || '');
+}
+
+function zonedLocalToDate(date, time) {
+  const [year, month, day] = date.split('-').map(Number);
+  const [hour, minute] = time.split(':').map(Number);
+  const guess = Date.UTC(year, month - 1, day, hour, minute, 0);
+  const formatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TIME_ZONE,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+  });
+  const parts = Object.fromEntries(formatter.formatToParts(new Date(guess)).filter(p => p.type !== 'literal').map(p => [p.type, p.value]));
+  const representedAsUtc = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute, +parts.second);
+  const offset = representedAsUtc - guess;
+  return new Date(guess - offset);
+}
+
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
+async function getBusy(token, calendarId, date) {
+  const start = zonedLocalToDate(date, '00:00');
+  const next = new Date(start.getTime() + 30 * 60 * 60 * 1000);
+  const nextLocal = new Intl.DateTimeFormat('en-CA', {
+    timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit'
+  }).format(next);
+  const end = zonedLocalToDate(nextLocal, '00:00');
+
+  const response = await fetch(`${CALENDAR_API}/freeBusy`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      timeMin: start.toISOString(),
+      timeMax: end.toISOString(),
+      timeZone: TIME_ZONE,
+      items: [{ id: calendarId }]
+    })
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(`CALENDAR_${response.status}: ${data.error?.message || 'Erreur Google Calendar.'}`);
+  const calendar = data.calendars?.[calendarId];
+  if (calendar?.errors?.length) throw new Error(`CALENDAR_ACCESS: ${calendar.errors[0].reason || 'Accès au calendrier refusé.'}`);
+  return calendar?.busy || [];
+}
+
+function overlapsBusy(start, end, busy) {
+  return busy.some(item => start < new Date(item.end) && end > new Date(item.start));
+}
+
+function availableSlots(date, durationMinutes, busy) {
+  return SLOT_STARTS.filter(time => {
+    const start = zonedLocalToDate(date, time);
+    const end = addMinutes(start, durationMinutes);
+    return !overlapsBusy(start, end, busy);
+  });
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
@@ -104,67 +165,57 @@ export default async function handler(req, res) {
     const calendarId = getCalendarId();
 
     if (req.method === 'GET') {
-      const { date, timeMin, timeMax } = req.query;
-      if (!date && (!timeMin || !timeMax)) {
-        return json(res, 400, { error: 'Indiquez une date ou timeMin/timeMax.' });
-      }
+      const date = String(req.query.date || '');
+      const durationMinutes = Math.max(15, Math.min(240, Number(req.query.duration || 60)));
+      if (!validDate(date)) return json(res, 400, { error: 'Date invalide.' });
 
-      const start = timeMin || `${date}T00:00:00+02:00`;
-      const end = timeMax || `${date}T23:59:59+02:00`;
-      const response = await fetch(`${CALENDAR_API}/freeBusy`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          timeMin: start,
-          timeMax: end,
-          timeZone: TIME_ZONE,
-          items: [{ id: calendarId }]
-        })
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(`CALENDAR_${response.status}: ${data.error?.message || 'Erreur Google Calendar.'}`);
-      }
-
+      const busy = await getBusy(token, calendarId, date);
       return json(res, 200, {
+        date,
         timeZone: TIME_ZONE,
-        busy: data.calendars?.[calendarId]?.busy || []
+        busy,
+        available: availableSlots(date, durationMinutes, busy)
       });
     }
 
-    const { summary, description, start, end, customer } = req.body || {};
-    if (!summary || !start || !end || !customer?.email) {
+    const body = req.body || {};
+    const { service, price, date, time, durationMinutes, customer, note } = body;
+    const duration = Number(durationMinutes);
+    if (!service || !validDate(date) || !validTime(time) || !Number.isFinite(duration) || duration < 15 || !customer?.email || !customer?.firstName || !customer?.lastName || !customer?.phone) {
       return json(res, 400, { error: 'Informations de réservation incomplètes.' });
     }
 
+    const start = zonedLocalToDate(date, time);
+    const end = addMinutes(start, duration);
+    const busy = await getBusy(token, calendarId, date);
+    if (overlapsBusy(start, end, busy)) {
+      return json(res, 409, { error: 'Ce créneau vient d’être réservé. Merci d’en choisir un autre.', code: 'SLOT_UNAVAILABLE' });
+    }
+
+    const description = [
+      `Cliente : ${customer.firstName} ${customer.lastName}`,
+      `Téléphone : ${customer.phone}`,
+      `E-mail : ${customer.email}`,
+      price ? `Tarif : ${price}` : null,
+      note ? `Note : ${note}` : null,
+      'Réservation effectuée via nail-by-sandra-4fon.vercel.app'
+    ].filter(Boolean).join('\n');
+
     const event = {
-      summary: `Nail by Sandra — ${summary}`,
-      description: description || '',
-      start: { dateTime: start, timeZone: TIME_ZONE },
-      end: { dateTime: end, timeZone: TIME_ZONE },
-      attendees: [{ email: customer.email, displayName: customer.name || undefined }]
+      summary: `Nail by Sandra — ${service}`,
+      description,
+      start: { dateTime: start.toISOString(), timeZone: TIME_ZONE },
+      end: { dateTime: end.toISOString(), timeZone: TIME_ZONE }
     };
 
-    const response = await fetch(
-      `${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events?sendUpdates=all`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(event)
-      }
-    );
+    const response = await fetch(`${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(event)
+    });
 
     const data = await response.json();
-    if (!response.ok) {
-      throw new Error(`EVENT_${response.status}: ${data.error?.message || 'Impossible de créer le rendez-vous.'}`);
-    }
+    if (!response.ok) throw new Error(`EVENT_${response.status}: ${data.error?.message || 'Impossible de créer le rendez-vous.'}`);
 
     return json(res, 201, { success: true, eventId: data.id, htmlLink: data.htmlLink });
   } catch (error) {
