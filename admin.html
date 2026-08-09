@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f7f0eb">
+<title>Espace Sandra — Nail by Sandra</title>
+<style>
+:root{--bg:#f8f3ef;--paper:#fffdfa;--ink:#252120;--muted:#817773;--line:#e5d9d2;--accent:#8f685f;--soft:#f1e7e1;--shadow:0 18px 50px rgba(66,48,42,.08)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.card{width:min(460px,100%);background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow)}.brand{font:400 25px Georgia,serif;letter-spacing:.08em;margin-bottom:26px}.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:var(--accent);font-weight:700}.title{font:400 42px/1.05 Georgia,serif;margin:12px 0 12px}.muted{color:var(--muted);line-height:1.65}.field{margin-top:22px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}.field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;color:var(--ink);font:inherit}.btn{width:100%;margin-top:18px;border:0;border-radius:999px;padding:15px 23px;background:var(--ink);color:#fff;font-weight:650;cursor:pointer}.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}.error{margin-top:14px;color:#8b3f34;font-size:14px}.hidden{display:none}.dashboard{width:min(980px,100%)}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:25px;box-shadow:var(--shadow)}@media(max-width:600px){.card{padding:24px}.title{font-size:36px}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="card" id="loginCard">
+    <div class="brand">NAIL BY SANDRA</div>
+    <div class="eyebrow">Espace privé</div>
+    <h1 class="title">Bonjour Sandra.</h1>
+    <p class="muted">Connectez-vous pour accéder à votre agenda, vos clientes et vos données de gestion.</p>
+    <form id="loginForm">
+      <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit">Se connecter</button>
+      <div class="error hidden" id="loginError"></div>
+    </form>
+    <button class="btn secondary" onclick="location.href='/'">Retour au site</button>
+  </section>
+
+  <section class="dashboard hidden" id="dashboard">
+    <div class="top"><div><div class="eyebrow">Espace privé</div><h1 class="title">Bonjour Sandra.</h1></div><button class="btn secondary" style="width:auto;margin:0" onclick="logout()">Se déconnecter</button></div>
+    <div class="panel"><h2 style="font:400 28px Georgia,serif;margin-top:0">Connexion sécurisée active</h2><p class="muted">L’espace privé est maintenant protégé par une session sécurisée. La prochaine étape sera d’y afficher les vrais rendez-vous Google Calendar.</p></div>
+  </section>
+</div>
+<script>
+async function checkSession(){try{const r=await fetch('/api/admin-session',{credentials:'same-origin'});const d=await r.json();showState(Boolean(d.authenticated))}catch{showState(false)}}
+function showState(authenticated){document.getElementById('loginCard').classList.toggle('hidden',authenticated);document.getElementById('dashboard').classList.toggle('hidden',!authenticated)}
+document.getElementById('loginForm').addEventListener('submit',async(e)=>{e.preventDefault();const error=document.getElementById('loginError');error.classList.add('hidden');const password=document.getElementById('password').value;try{const r=await fetch('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({password})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Connexion impossible.');document.getElementById('password').value='';showState(true)}catch(err){error.textContent=err.message;error.classList.remove('hidden')}});
+async function logout(){await fetch('/api/admin-logout',{method:'POST',credentials:'same-origin'});showState(false)}
+checkSession();
+</script>
+</body>
+</html>
