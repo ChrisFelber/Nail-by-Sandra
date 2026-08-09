@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 
 const COOKIE_NAME = 'nbs_admin_session';
 const SESSION_TTL_SECONDS = 60 * 60 * 12;
+const PBKDF2_ITERATIONS = 600000;
 
 function safeEqual(a, b) {
   const left = Buffer.from(String(a));
@@ -14,7 +15,7 @@ export function verifyPassword(password) {
   if (!stored) throw new Error('ADMIN_PASSWORD_HASH_MISSING');
   const [salt, expected] = stored.split(':');
   if (!salt || !expected) throw new Error('ADMIN_PASSWORD_HASH_INVALID');
-  const actual = crypto.scryptSync(String(password || ''), salt, 64).toString('hex');
+  const actual = crypto.pbkdf2Sync(String(password || ''), salt, PBKDF2_ITERATIONS, 32, 'sha256').toString('hex');
   return safeEqual(actual, expected);
 }
 
