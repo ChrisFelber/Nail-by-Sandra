@@ -6,34 +6,67 @@
 <meta name="theme-color" content="#f7f0eb">
 <title>Espace Sandra — Nail by Sandra</title>
 <style>
-:root{--bg:#f8f3ef;--paper:#fffdfa;--ink:#252120;--muted:#817773;--line:#e5d9d2;--accent:#8f685f;--soft:#f1e7e1;--shadow:0 18px 50px rgba(66,48,42,.08)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{min-height:100vh;display:grid;place-items:center;padding:24px}.card{width:min(460px,100%);background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow)}.brand{font:400 25px Georgia,serif;letter-spacing:.08em;margin-bottom:26px}.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:var(--accent);font-weight:700}.title{font:400 42px/1.05 Georgia,serif;margin:12px 0 12px}.muted{color:var(--muted);line-height:1.65}.field{margin-top:22px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}.field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;color:var(--ink);font:inherit}.btn{width:100%;margin-top:18px;border:0;border-radius:999px;padding:15px 23px;background:var(--ink);color:#fff;font-weight:650;cursor:pointer}.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}.error{margin-top:14px;color:#8b3f34;font-size:14px}.hidden{display:none}.dashboard{width:min(980px,100%)}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:25px;box-shadow:var(--shadow)}@media(max-width:600px){.card{padding:24px}.title{font-size:36px}.top{align-items:flex-start;flex-direction:column}}
+:root{--bg:#f8f3ef;--paper:#fffdfa;--ink:#252120;--muted:#817773;--line:#e5d9d2;--accent:#8f685f;--soft:#f1e7e1;--shadow:0 18px 50px rgba(66,48,42,.08)}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{min-height:100vh;padding:28px}.login-wrap{min-height:calc(100vh - 56px);display:grid;place-items:center}.card{width:min(460px,100%);background:var(--paper);border:1px solid var(--line);border-radius:28px;padding:32px;box-shadow:var(--shadow)}.brand{font:400 25px Georgia,serif;letter-spacing:.08em}.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:10px;color:var(--accent);font-weight:700}.title{font:400 42px/1.05 Georgia,serif;margin:12px 0}.muted{color:var(--muted);line-height:1.65}.field{margin-top:22px}.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}.field input{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;color:var(--ink);font:inherit}.btn{border:0;border-radius:999px;padding:14px 20px;background:var(--ink);color:#fff;font-weight:650;cursor:pointer}.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}.btn.full{width:100%;margin-top:18px}.error{margin-top:14px;color:#8b3f34;font-size:14px}.hidden{display:none!important}.dashboard{max-width:1180px;margin:auto}.top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:12px 0 26px}.top-actions{display:flex;gap:10px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}.stat,.panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow)}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font:400 30px Georgia,serif;margin-top:8px}.grid{display:grid;grid-template-columns:1.35fr .65fr;gap:16px}.panel h2{font:400 27px Georgia,serif;margin:0 0 18px}.appointment{padding:17px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:95px 1fr auto;gap:16px;align-items:start}.appointment:last-child{border-bottom:0}.dateblock strong{display:block;font-size:14px}.dateblock span{display:block;color:var(--muted);font-size:12px;margin-top:3px}.appt-main strong{display:block;font:400 19px Georgia,serif}.appt-main p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.55;white-space:pre-line}.price{font-weight:700;white-space:nowrap}.empty{padding:28px 0;color:var(--muted);text-align:center}.loading{color:var(--muted);padding:18px 0}.next-card{background:var(--soft);border-radius:18px;padding:18px;margin-bottom:12px}.next-card strong{display:block;font:400 22px Georgia,serif}.next-card span{display:block;color:var(--muted);margin-top:6px;line-height:1.5}.mini-list{display:grid;gap:10px}.mini{border-top:1px solid var(--line);padding-top:12px}.mini:first-child{border-top:0;padding-top:0}.mini strong{display:block}.mini span{color:var(--muted);font-size:12px}.status{font-size:13px;color:var(--muted)}@media(max-width:850px){.stats{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn{flex:1}}@media(max-width:560px){.wrap{padding:16px}.card{padding:24px}.title{font-size:36px}.stats{grid-template-columns:1fr 1fr}.appointment{grid-template-columns:78px 1fr}.price{grid-column:2}.top-actions{flex-direction:column}.top-actions .btn{width:100%}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <section class="card" id="loginCard">
-    <div class="brand">NAIL BY SANDRA</div>
-    <div class="eyebrow">Espace privé</div>
-    <h1 class="title">Bonjour Sandra.</h1>
-    <p class="muted">Connectez-vous pour accéder à votre agenda, vos clientes et vos données de gestion.</p>
-    <form id="loginForm">
-      <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
-      <button class="btn" type="submit">Se connecter</button>
-      <div class="error hidden" id="loginError"></div>
-    </form>
-    <button class="btn secondary" onclick="location.href='/'">Retour au site</button>
-  </section>
+  <div class="login-wrap" id="loginWrap">
+    <section class="card" id="loginCard">
+      <div class="brand">NAIL BY SANDRA</div>
+      <div class="eyebrow" style="margin-top:26px">Espace privé</div>
+      <h1 class="title">Bonjour Sandra.</h1>
+      <p class="muted">Connectez-vous pour accéder à votre agenda et à vos rendez-vous.</p>
+      <form id="loginForm">
+        <div class="field"><label for="password">Mot de passe</label><input id="password" type="password" autocomplete="current-password" required></div>
+        <button class="btn full" type="submit">Se connecter</button>
+        <div class="error hidden" id="loginError"></div>
+      </form>
+      <button class="btn secondary full" onclick="location.href='/'">Retour au site</button>
+    </section>
+  </div>
 
   <section class="dashboard hidden" id="dashboard">
-    <div class="top"><div><div class="eyebrow">Espace privé</div><h1 class="title">Bonjour Sandra.</h1></div><button class="btn secondary" style="width:auto;margin:0" onclick="logout()">Se déconnecter</button></div>
-    <div class="panel"><h2 style="font:400 28px Georgia,serif;margin-top:0">Connexion sécurisée active</h2><p class="muted">L’espace privé est maintenant protégé par une session sécurisée. La prochaine étape sera d’y afficher les vrais rendez-vous Google Calendar.</p></div>
+    <div class="top"><div><div class="eyebrow">Espace privé</div><h1 class="title">Bonjour Sandra.</h1><div class="status" id="lastRefresh"></div></div><div class="top-actions"><button class="btn secondary" onclick="loadEvents()">Actualiser</button><button class="btn secondary" onclick="location.href='/'">Voir le site</button><button class="btn" onclick="logout()">Se déconnecter</button></div></div>
+
+    <div class="stats">
+      <div class="stat"><small>Rendez-vous aujourd'hui</small><strong id="statToday">—</strong></div>
+      <div class="stat"><small>Cette semaine</small><strong id="statWeek">—</strong></div>
+      <div class="stat"><small>Chiffre prévu</small><strong id="statRevenue">—</strong></div>
+      <div class="stat"><small>Prochain rendez-vous</small><strong id="statNext">—</strong></div>
+    </div>
+
+    <div class="grid">
+      <div class="panel"><h2>Prochains rendez-vous</h2><div id="appointments" class="loading">Chargement des rendez-vous…</div></div>
+      <div class="panel"><h2>À venir</h2><div id="nextAppointment"></div><div class="mini-list" id="todayList"></div></div>
+    </div>
   </section>
 </div>
 <script>
+const TZ='Europe/Zurich';
+function showState(authenticated){document.getElementById('loginWrap').classList.toggle('hidden',authenticated);document.getElementById('dashboard').classList.toggle('hidden',!authenticated);if(authenticated)loadEvents()}
 async function checkSession(){try{const r=await fetch('/api/admin-session',{credentials:'same-origin'});const d=await r.json();showState(Boolean(d.authenticated))}catch{showState(false)}}
-function showState(authenticated){document.getElementById('loginCard').classList.toggle('hidden',authenticated);document.getElementById('dashboard').classList.toggle('hidden',!authenticated)}
 document.getElementById('loginForm').addEventListener('submit',async(e)=>{e.preventDefault();const error=document.getElementById('loginError');error.classList.add('hidden');const password=document.getElementById('password').value;try{const r=await fetch('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({password})});const d=await r.json();if(!r.ok)throw new Error(d.error||'Connexion impossible.');document.getElementById('password').value='';showState(true)}catch(err){error.textContent=err.message;error.classList.remove('hidden')}});
 async function logout(){await fetch('/api/admin-logout',{method:'POST',credentials:'same-origin'});showState(false)}
+function localParts(value){const d=new Date(value);const parts=Object.fromEntries(new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',weekday:'short',hourCycle:'h23'}).formatToParts(d).filter(p=>p.type!=='literal').map(p=>[p.type,p.value]));return parts}
+function isoLocalDay(value){const p=localParts(value);return `${p.year}-${p.month}-${p.day}`}
+function todayLocal(){return isoLocalDay(new Date())}
+function startOfWeekLocal(){const now=new Date();const day=Number(new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short'}).format(now)==='Sun'?7:['Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(new Intl.DateTimeFormat('en-US',{timeZone:TZ,weekday:'short'}).format(now))+1);const copy=new Date(now);copy.setUTCDate(copy.getUTCDate()-(day-1));return isoLocalDay(copy)}
+function endOfWeekLocal(){const s=new Date(startOfWeekLocal()+'T12:00:00Z');s.setUTCDate(s.getUTCDate()+6);return isoLocalDay(s)}
+function serviceName(summary){return String(summary||'Rendez-vous').replace(/^Nail by Sandra\s*[—-]\s*/i,'')}
+function field(desc,label){const m=String(desc||'').match(new RegExp('^'+label+'\\s*:\\s*(.+)$','mi'));return m?m[1].trim():''}
+function priceNumber(desc){const raw=field(desc,'Tarif');const m=raw.replace("'",'').match(/(\d+(?:[.,]\d+)?)/);return m?Number(m[1].replace(',','.')):0}
+function customerName(desc){return field(desc,'Cliente')||'Cliente'}
+function phone(desc){return field(desc,'Téléphone')}
+function formatMoney(n){return new Intl.NumberFormat('fr-CH',{style:'currency',currency:'CHF',maximumFractionDigits:0}).format(n)}
+function fmtDate(value){return new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,weekday:'short',day:'2-digit',month:'2-digit'}).format(new Date(value))}
+function fmtTime(value){return new Intl.DateTimeFormat('fr-CH',{timeZone:TZ,hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).format(new Date(value))}
+function render(events){const today=todayLocal();const weekStart=startOfWeekLocal();const weekEnd=endOfWeekLocal();const todayEvents=events.filter(e=>isoLocalDay(e.start)===today);const weekEvents=events.filter(e=>{const d=isoLocalDay(e.start);return d>=weekStart&&d<=weekEnd});document.getElementById('statToday').textContent=todayEvents.length;document.getElementById('statWeek').textContent=weekEvents.length;document.getElementById('statRevenue').textContent=formatMoney(weekEvents.reduce((s,e)=>s+priceNumber(e.description),0));document.getElementById('statNext').textContent=events[0]?fmtTime(events[0].start):'—';
+const appointments=document.getElementById('appointments');if(!events.length){appointments.className='empty';appointments.textContent='Aucun rendez-vous à venir.'}else{appointments.className='';appointments.innerHTML=events.map(e=>`<div class="appointment"><div class="dateblock"><strong>${fmtDate(e.start)}</strong><span>${fmtTime(e.start)}–${fmtTime(e.end)}</span></div><div class="appt-main"><strong>${escapeHtml(customerName(e.description))}</strong><p>${escapeHtml(serviceName(e.summary))}${phone(e.description)?'\n'+escapeHtml(phone(e.description)):''}</p></div><div class="price">${priceNumber(e.description)?formatMoney(priceNumber(e.description)):''}</div></div>`).join('')}
+const next=document.getElementById('nextAppointment');if(events[0])next.innerHTML=`<div class="next-card"><strong>${escapeHtml(customerName(events[0].description))}</strong><span>${escapeHtml(serviceName(events[0].summary))}<br>${fmtDate(events[0].start)} à ${fmtTime(events[0].start)}</span></div>`;else next.innerHTML='<div class="empty">Aucun rendez-vous.</div>';
+const todayList=document.getElementById('todayList');todayList.innerHTML=todayEvents.length?todayEvents.map(e=>`<div class="mini"><strong>${fmtTime(e.start)} · ${escapeHtml(customerName(e.description))}</strong><span>${escapeHtml(serviceName(e.summary))}</span></div>`).join(''):'<div class="muted">Aucun autre rendez-vous aujourd’hui.</div>'}
+function escapeHtml(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+async function loadEvents(){const box=document.getElementById('appointments');box.className='loading';box.textContent='Chargement des rendez-vous…';try{const r=await fetch('/api/admin-events',{credentials:'same-origin'});if(r.status===401){showState(false);return}const d=await r.json();if(!r.ok)throw new Error(d.error||'Impossible de charger les rendez-vous.');render(d.events||[]);document.getElementById('lastRefresh').textContent='Mis à jour à '+new Intl.DateTimeFormat('fr-CH',{hour:'2-digit',minute:'2-digit'}).format(new Date())}catch(err){box.className='error';box.textContent=err.message}}
 checkSession();
 </script>
 </body>
