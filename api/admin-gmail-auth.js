@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { isAuthenticated } from './_admin-auth.js';
+import { isAuthenticated } from '../lib/admin-auth.js';
 
 const REDIRECT_URI = 'https://nail-by-sandra-4fon.vercel.app/api/gmail-auth-callback';
 const SCOPE = 'https://www.googleapis.com/auth/gmail.send';
