@@ -1,4 +1,4 @@
-import { createSessionToken, setSessionCookie, verifyPassword } from './_admin-auth.js';
+import { createSessionToken, setSessionCookie, verifyPassword } from '../lib/admin-auth.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
