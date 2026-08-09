@@ -5,27 +5,38 @@ const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
 const TIME_ZONE = 'Europe/Zurich';
 
 function base64Url(value) {
-  return Buffer.from(value).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+  return Buffer.from(value).toString('base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
 }
 
 function getServiceAccount() {
-  // Prefer base64 to avoid JSON/newline formatting problems in Vercel.
-  const encoded = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64;
-  const raw = encoded
-    ? Buffer.from(encoded.trim(), 'base64').toString('utf8')
-    : process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
+  const base64Raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64;
+  const jsonRaw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
 
-  if (!raw) throw new Error('SERVICE_ACCOUNT_MISSING');
+  if (!base64Raw && !jsonRaw) {
+    throw new Error('SERVICE_ACCOUNT_JSON_MISSING');
+  }
+
+  let raw = jsonRaw;
+  if (base64Raw) {
+    try {
+      raw = Buffer.from(base64Raw.trim(), 'base64').toString('utf8');
+    } catch {
+      throw new Error('SERVICE_ACCOUNT_JSON_BASE64_INVALID');
+    }
+  }
 
   let account;
   try {
     account = JSON.parse(raw);
-  } catch (error) {
-    throw new Error(`SERVICE_ACCOUNT_JSON_INVALID: ${error.message}`);
+  } catch {
+    throw new Error('SERVICE_ACCOUNT_JSON_INVALID');
   }
 
   if (!account.client_email || !account.private_key) {
-    throw new Error('SERVICE_ACCOUNT_INCOMPLETE');
+    throw new Error('SERVICE_ACCOUNT_JSON_INCOMPLETE');
   }
 
   account.private_key = account.private_key.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
@@ -35,6 +46,7 @@ function getServiceAccount() {
 async function getAccessToken() {
   const account = getServiceAccount();
   const now = Math.floor(Date.now() / 1000);
+
   const header = base64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
   const claim = base64Url(JSON.stringify({
     iss: account.client_email,
@@ -43,11 +55,15 @@ async function getAccessToken() {
     iat: now,
     exp: now + 3600
   }));
+
   const unsigned = `${header}.${claim}`;
   const signer = crypto.createSign('RSA-SHA256');
   signer.update(unsigned);
   signer.end();
-  const signature = signer.sign(account.private_key, 'base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+  const signature = signer.sign(account.private_key, 'base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
 
   const response = await fetch(GOOGLE_TOKEN_URL, {
     method: 'POST',
@@ -57,11 +73,18 @@ async function getAccessToken() {
       assertion: `${unsigned}.${signature}`
     })
   });
+
   const data = await response.json();
   if (!response.ok || !data.access_token) {
-    throw new Error(`AUTH_${response.status}: ${data.error_description || data.error || 'TOKEN_ERROR'}`);
+    throw new Error(`AUTH_${response.status}: ${data.error_description || data.error || 'Impossible d’obtenir le jeton Google.'}`);
   }
   return data.access_token;
+}
+
+function getCalendarId() {
+  const id = process.env.GOOGLE_CALENDAR_ID;
+  if (!id) throw new Error('CALENDAR_ID_MISSING');
+  return id;
 }
 
 function json(res, status, body) {
@@ -78,26 +101,46 @@ export default async function handler(req, res) {
 
   try {
     const token = await getAccessToken();
-    const calendarId = process.env.GOOGLE_CALENDAR_ID;
-    if (!calendarId) throw new Error('CALENDAR_ID_MISSING');
+    const calendarId = getCalendarId();
 
     if (req.method === 'GET') {
       const { date, timeMin, timeMax } = req.query;
-      if (!date && (!timeMin || !timeMax)) return json(res, 400, { error: 'Indiquez une date ou timeMin/timeMax.' });
+      if (!date && (!timeMin || !timeMax)) {
+        return json(res, 400, { error: 'Indiquez une date ou timeMin/timeMax.' });
+      }
+
       const start = timeMin || `${date}T00:00:00+02:00`;
       const end = timeMax || `${date}T23:59:59+02:00`;
       const response = await fetch(`${CALENDAR_API}/freeBusy`, {
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ timeMin: start, timeMax: end, timeZone: TIME_ZONE, items: [{ id: calendarId }] })
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          timeMin: start,
+          timeMax: end,
+          timeZone: TIME_ZONE,
+          items: [{ id: calendarId }]
+        })
       });
+
       const data = await response.json();
-      if (!response.ok) throw new Error(`CALENDAR_${response.status}: ${data.error?.message || 'CALENDAR_ERROR'}`);
-      return json(res, 200, { timeZone: TIME_ZONE, busy: data.calendars?.[calendarId]?.busy || [] });
+      if (!response.ok) {
+        throw new Error(`CALENDAR_${response.status}: ${data.error?.message || 'Erreur Google Calendar.'}`);
+      }
+
+      return json(res, 200, {
+        timeZone: TIME_ZONE,
+        busy: data.calendars?.[calendarId]?.busy || []
+      });
     }
 
     const { summary, description, start, end, customer } = req.body || {};
-    if (!summary || !start || !end || !customer?.email) return json(res, 400, { error: 'Informations de réservation incomplètes.' });
+    if (!summary || !start || !end || !customer?.email) {
+      return json(res, 400, { error: 'Informations de réservation incomplètes.' });
+    }
+
     const event = {
       summary: `Nail by Sandra — ${summary}`,
       description: description || '',
@@ -105,16 +148,31 @@ export default async function handler(req, res) {
       end: { dateTime: end, timeZone: TIME_ZONE },
       attendees: [{ email: customer.email, displayName: customer.name || undefined }]
     };
-    const response = await fetch(`${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events?sendUpdates=all`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(event)
-    });
+
+    const response = await fetch(
+      `${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events?sendUpdates=all`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(event)
+      }
+    );
+
     const data = await response.json();
-    if (!response.ok) throw new Error(`EVENT_${response.status}: ${data.error?.message || 'EVENT_ERROR'}`);
+    if (!response.ok) {
+      throw new Error(`EVENT_${response.status}: ${data.error?.message || 'Impossible de créer le rendez-vous.'}`);
+    }
+
     return json(res, 201, { success: true, eventId: data.id, htmlLink: data.htmlLink });
   } catch (error) {
     console.error('Google Calendar:', error);
-    return json(res, 500, { error: 'La connexion à Google Calendar a échoué.', code: 'GOOGLE_CALENDAR_ERROR', diagnostic: error?.message || 'UNKNOWN_ERROR' });
+    return json(res, 500, {
+      error: 'La connexion à Google Calendar a échoué.',
+      code: 'GOOGLE_CALENDAR_ERROR',
+      diagnostic: error?.message || 'Erreur inconnue.'
+    });
   }
 }
