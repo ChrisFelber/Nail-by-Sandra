@@ -15,6 +15,11 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
   } catch (error) {
     console.error('Admin login:', error);
-    return res.status(500).json({ error: 'Connexion administratrice indisponible.' });
+    const code = String(error?.message || 'ADMIN_LOGIN_ERROR');
+    const known = ['ADMIN_PASSWORD_HASH_MISSING','ADMIN_PASSWORD_HASH_INVALID','ADMIN_SESSION_SECRET_MISSING'];
+    return res.status(500).json({
+      error: 'Connexion administratrice indisponible.',
+      diagnostic: known.includes(code) ? code : 'ADMIN_LOGIN_ERROR'
+    });
   }
 }
