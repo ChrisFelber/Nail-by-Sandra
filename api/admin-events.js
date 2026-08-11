@@ -42,9 +42,10 @@ export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).json({error:'Méthode non autorisée.'})}
   if(!isAuthenticated(req))return res.status(401).json({error:'Non autorisé.'});
   try{
-    const token=await getAccessToken(),now=new Date();
-    const past=new Date(now.getTime()-30*24*60*60*1000),horizon=new Date(now.getTime()+21*24*60*60*1000);
-    const params=new URLSearchParams({timeMin:past.toISOString(),timeMax:horizon.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'200',timeZone:TIME_ZONE});
+    const token=await getAccessToken(),now=new Date(),includePast=String(req.query?.includePast||'')==='1';
+    const start=includePast?new Date(now.getTime()-30*24*60*60*1000):now;
+    const horizon=new Date(now.getTime()+21*24*60*60*1000);
+    const params=new URLSearchParams({timeMin:start.toISOString(),timeMax:horizon.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'200',timeZone:TIME_ZONE});
     const response=await fetch(`${CALENDAR_API}/calendars/${encodeURIComponent(calendarId())}/events?${params}`,{headers:{Authorization:`Bearer ${token}`}}),data=await response.json();
     if(!response.ok)throw new Error(data.error?.message||'CALENDAR_EVENTS_FAILED');
 
