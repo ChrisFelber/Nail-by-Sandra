@@ -37,6 +37,9 @@ async function getAccessToken() {
   return data.access_token;
 }
 function calendarId(){const id=process.env.GOOGLE_CALENDAR_ID;if(!id)throw new Error('CALENDAR_ID_MISSING');return id}
+async function ensureAccounting(sql){
+  await sql`CREATE TABLE IF NOT EXISTS appointments_accounting (id BIGSERIAL PRIMARY KEY,calendar_event_id TEXT NOT NULL UNIQUE,appointment_date DATE NOT NULL,appointment_start_time TIME,customer_first_name TEXT NOT NULL,customer_last_name TEXT NOT NULL,customer_email TEXT,customer_phone TEXT,booked_service_name TEXT NOT NULL,booked_service_amount_cents INTEGER NOT NULL CHECK(booked_service_amount_cents>=0),total_amount_cents INTEGER NOT NULL CHECK(total_amount_cents>=0),currency CHAR(3) NOT NULL DEFAULT 'CHF' CHECK(currency='CHF'),accounting_status TEXT NOT NULL DEFAULT 'confirmed' CHECK(accounting_status IN ('confirmed','reversed')),confirmed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),reversed_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+}
 
 export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).json({error:'Méthode non autorisée.'})}
@@ -50,6 +53,7 @@ export default async function handler(req,res){
     if(!response.ok)throw new Error(data.error?.message||'CALENDAR_EVENTS_FAILED');
 
     const sql=getDb();
+    await ensureAccounting(sql);
     const accountingRows=await sql`SELECT calendar_event_id, accounting_status FROM appointments_accounting`;
     const accountingMap=new Map(accountingRows.map(r=>[r.calendar_event_id,r.accounting_status]));
 

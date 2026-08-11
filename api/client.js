@@ -16,7 +16,17 @@ function hashPassword(password,salt=crypto.randomBytes(16).toString('hex')){retu
 function verify(password,stored){try{const [salt,hex]=String(stored).split(':');const a=Buffer.from(hex,'hex'),b=crypto.scryptSync(password,salt,64);return a.length===b.length&&crypto.timingSafeEqual(a,b)}catch{return false}}
 function cleanEmail(v){return String(v||'').trim().toLowerCase()}
 function validEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
-async function ensure(sql){await sql`CREATE TABLE IF NOT EXISTS client_accounts (id BIGSERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT, password_hash TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`}
+async function ensure(sql){
+ await sql`CREATE TABLE IF NOT EXISTS appointments_accounting (id BIGSERIAL PRIMARY KEY,calendar_event_id TEXT NOT NULL UNIQUE,appointment_date DATE NOT NULL,appointment_start_time TIME,customer_first_name TEXT NOT NULL,customer_last_name TEXT NOT NULL,customer_email TEXT,customer_phone TEXT,booked_service_name TEXT NOT NULL,booked_service_amount_cents INTEGER NOT NULL CHECK(booked_service_amount_cents>=0),total_amount_cents INTEGER NOT NULL CHECK(total_amount_cents>=0),currency CHAR(3) NOT NULL DEFAULT 'CHF' CHECK(currency='CHF'),accounting_status TEXT NOT NULL DEFAULT 'confirmed' CHECK(accounting_status IN ('confirmed','reversed')),confirmed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),reversed_at TIMESTAMPTZ,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+ await sql`CREATE TABLE IF NOT EXISTS appointment_items (id BIGSERIAL PRIMARY KEY,appointment_accounting_id BIGINT NOT NULL REFERENCES appointments_accounting(id) ON DELETE CASCADE,item_name TEXT NOT NULL,amount_cents INTEGER NOT NULL CHECK(amount_cents>=0),quantity INTEGER NOT NULL DEFAULT 1 CHECK(quantity>0),source TEXT NOT NULL DEFAULT 'manual' CHECK(source IN ('booked','manual')),created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+ await sql`CREATE TABLE IF NOT EXISTS expenses (id BIGSERIAL PRIMARY KEY,expense_date DATE NOT NULL,category TEXT NOT NULL,description TEXT NOT NULL,amount_cents INTEGER NOT NULL CHECK(amount_cents>0),currency CHAR(3) NOT NULL DEFAULT 'CHF' CHECK(currency='CHF'),created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+ await sql`CREATE TABLE IF NOT EXISTS accounting_audit_log (id BIGSERIAL PRIMARY KEY,appointment_accounting_id BIGINT REFERENCES appointments_accounting(id) ON DELETE SET NULL,action TEXT NOT NULL CHECK(action IN ('corrected','reversed','restored')),reason TEXT,before_data JSONB,after_data JSONB,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+ await sql`CREATE TABLE IF NOT EXISTS expense_categories (id BIGSERIAL PRIMARY KEY,name TEXT NOT NULL UNIQUE,active BOOLEAN NOT NULL DEFAULT TRUE,created_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+ await sql`ALTER TABLE expenses ADD COLUMN IF NOT EXISTS receipt_url TEXT`;
+ await sql`ALTER TABLE expenses ADD COLUMN IF NOT EXISTS receipt_name TEXT`;
+ await sql`INSERT INTO expense_categories(name) VALUES ('Matériel'),('Produits'),('Loyer'),('Formation'),('Publicité'),('Équipement'),('Frais administratifs'),('Autre') ON CONFLICT(name) DO NOTHING`;
+ await sql`CREATE TABLE IF NOT EXISTS client_accounts (id BIGSERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT NOT NULL UNIQUE, phone TEXT, password_hash TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW())`;
+}
 
 export default async function handler(req,res){
  try{const sql=getDb();await ensure(sql);const action=String(req.query?.action||req.body?.action||'session');
