@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { getDb } from '../lib/db.js';
+import { isAuthenticated } from '../lib/admin-auth.js';
 
 const COOKIE='nbs_client';
 function json(res,status,body){res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');return res.status(status).json(body)}
@@ -19,6 +20,33 @@ async function ensure(sql){await sql`CREATE TABLE IF NOT EXISTS client_accounts 
 
 export default async function handler(req,res){
  try{const sql=getDb();await ensure(sql);const action=String(req.query?.action||req.body?.action||'session');
+  if(req.method==='GET'&&action==='admin_clients'){
+   if(!isAuthenticated(req))return json(res,401,{error:'Non autorisé.'});
+   const rows=await sql`
+    WITH emails AS (
+      SELECT lower(email) email FROM client_accounts
+      UNION
+      SELECT lower(customer_email) email FROM appointments_accounting WHERE customer_email IS NOT NULL AND trim(customer_email)<>''
+    ), hist AS (
+      SELECT lower(customer_email) email, count(*)::int appointment_count,
+        max(appointment_date) last_appointment,
+        coalesce(sum(total_amount_cents) FILTER (WHERE accounting_status='confirmed'),0)::bigint total_spent_cents,
+        (array_agg(trim(customer_first_name||' '||customer_last_name) ORDER BY appointment_date DESC,id DESC))[1] last_name_value,
+        (array_agg(customer_phone ORDER BY appointment_date DESC,id DESC))[1] last_phone
+      FROM appointments_accounting WHERE customer_email IS NOT NULL AND trim(customer_email)<>'' GROUP BY lower(customer_email)
+    )
+    SELECT e.email,a.id account_id,a.first_name,a.last_name,a.phone,a.created_at,
+      coalesce(h.appointment_count,0) appointment_count,h.last_appointment,
+      coalesce(h.total_spent_cents,0) total_spent_cents,h.last_name_value,h.last_phone
+    FROM emails e LEFT JOIN client_accounts a ON lower(a.email)=e.email LEFT JOIN hist h ON h.email=e.email
+    ORDER BY coalesce(h.last_appointment,a.created_at::date) DESC NULLS LAST,e.email`;
+   return json(res,200,{ok:true,clients:rows});
+  }
+  if(req.method==='GET'&&action==='admin_client_history'){
+   if(!isAuthenticated(req))return json(res,401,{error:'Non autorisé.'});const email=cleanEmail(req.query?.email);if(!validEmail(email))return json(res,400,{error:'Adresse e-mail invalide.'});
+   const rows=await sql`SELECT id,appointment_date,appointment_start_time,booked_service_name,total_amount_cents,accounting_status,confirmed_at FROM appointments_accounting WHERE lower(customer_email)=${email} ORDER BY appointment_date DESC,appointment_start_time DESC NULLS LAST LIMIT 100`;
+   return json(res,200,{ok:true,history:rows});
+  }
   if(req.method==='POST'&&action==='register'){
    const first=String(req.body?.first_name||'').trim().slice(0,80),last=String(req.body?.last_name||'').trim().slice(0,80),email=cleanEmail(req.body?.email),phone=String(req.body?.phone||'').trim().slice(0,40),password=String(req.body?.password||'');
    if(!first||!last||!validEmail(email)||password.length<8)return json(res,400,{error:'Renseignez vos informations et un mot de passe d’au moins 8 caractères.'});
