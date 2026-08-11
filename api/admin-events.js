@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { isAuthenticated } from '../lib/admin-auth.js';
+import { getDb } from '../lib/db.js';
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
@@ -41,13 +42,28 @@ export default async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).json({error:'Méthode non autorisée.'})}
   if(!isAuthenticated(req))return res.status(401).json({error:'Non autorisé.'});
   try{
-    const token=await getAccessToken(),now=new Date(),horizon=new Date(now.getTime()+21*24*60*60*1000);
-    const params=new URLSearchParams({timeMin:now.toISOString(),timeMax:horizon.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'100',timeZone:TIME_ZONE});
+    const token=await getAccessToken(),now=new Date(),includePast=String(req.query?.includePast||'')==='1';
+    const start=includePast?new Date(now.getTime()-30*24*60*60*1000):now;
+    const horizon=new Date(now.getTime()+21*24*60*60*1000);
+    const params=new URLSearchParams({timeMin:start.toISOString(),timeMax:horizon.toISOString(),singleEvents:'true',orderBy:'startTime',maxResults:'200',timeZone:TIME_ZONE});
     const response=await fetch(`${CALENDAR_API}/calendars/${encodeURIComponent(calendarId())}/events?${params}`,{headers:{Authorization:`Bearer ${token}`}}),data=await response.json();
     if(!response.ok)throw new Error(data.error?.message||'CALENDAR_EVENTS_FAILED');
+
+    const sql=getDb();
+    const accountingRows=await sql`SELECT calendar_event_id, accounting_status FROM appointments_accounting`;
+    const accountingMap=new Map(accountingRows.map(r=>[r.calendar_event_id,r.accounting_status]));
+
     const events=(data.items||[])
       .filter(e=>e.status!=='cancelled'&&e.extendedProperties?.private?.nbsType!=='unavailability')
-      .map(e=>({id:e.id,summary:e.summary||'Rendez-vous',description:e.description||'',start:e.start?.dateTime||e.start?.date||null,end:e.end?.dateTime||e.end?.date||null,htmlLink:e.htmlLink||''}));
+      .map(e=>({
+        id:e.id,
+        summary:e.summary||'Rendez-vous',
+        description:e.description||'',
+        start:e.start?.dateTime||e.start?.date||null,
+        end:e.end?.dateTime||e.end?.date||null,
+        htmlLink:e.htmlLink||'',
+        accountingStatus:accountingMap.get(e.id)||null
+      }));
     return res.status(200).json({timeZone:TIME_ZONE,events});
   }catch(error){console.error('Admin events:',error);return res.status(500).json({error:'Impossible de charger les rendez-vous.',diagnostic:error?.message||'Erreur inconnue.'})}
 }

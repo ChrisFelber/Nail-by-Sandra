@@ -1,0 +1,8 @@
+{
+  "name": "nail-by-sandra",
+  "private": true,
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "@vercel/blob": "^2.3.0"
+  }
+}
