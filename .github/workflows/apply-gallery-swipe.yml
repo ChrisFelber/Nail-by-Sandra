@@ -29,85 +29,88 @@ jobs:
           p = root / 'index.html'
           text = p.read_text()
 
-          css = r'''
-/* Réalisations swipe gallery */
-.portfolio-carousel{max-width:760px;margin:0 auto;position:relative}
-.portfolio-viewport{overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow-lg);background:var(--paper)}
-.portfolio-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.portfolio-track::-webkit-scrollbar{display:none}
-.portfolio-slide{position:relative;flex:0 0 100%;scroll-snap-align:start;aspect-ratio:3/4;background-image:url('assets/realisations-sprite.jpg?v=20260812-1');background-repeat:no-repeat;background-size:800% 100%;background-position:calc(var(--pos) * 100% / 7) center;background-color:var(--soft)}
-.portfolio-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(37,33,32,.18),transparent 38%);pointer-events:none}
-.portfolio-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(255,253,250,.94);color:var(--ink);display:grid;place-items:center;font-size:25px;line-height:1;box-shadow:var(--shadow);transition:.2s}
-.portfolio-nav:hover{background:var(--soft);transform:translateY(-50%) scale(1.04)}
-.portfolio-prev{left:-62px}.portfolio-next{right:-62px}
-.portfolio-dots{display:flex;justify-content:center;gap:8px;margin-top:18px}
-.portfolio-dot{width:8px;height:8px;border:0;border-radius:50%;padding:0;background:var(--line);transition:.2s}
-.portfolio-dot.active{width:24px;border-radius:999px;background:var(--accent)}
-.portfolio-swipe-hint{text-align:center;color:var(--muted);font-size:12px;margin-top:10px}
-@media(max-width:900px){.portfolio-nav{display:none}.portfolio-carousel{max-width:620px}}
-@media(max-width:768px){.portfolio-carousel{margin:0 -4px}.portfolio-viewport{border-radius:var(--radius-sm)}.portfolio-swipe-hint{display:block}}
-'''
+          css = '''
+          /* Réalisations swipe gallery */
+          .portfolio-carousel{max-width:760px;margin:0 auto;position:relative}
+          .portfolio-viewport{overflow:hidden;border-radius:var(--radius);box-shadow:var(--shadow-lg);background:var(--paper)}
+          .portfolio-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+          .portfolio-track::-webkit-scrollbar{display:none}
+          .portfolio-slide{position:relative;flex:0 0 100%;scroll-snap-align:start;aspect-ratio:3/4;background-image:url('assets/realisations-sprite.jpg?v=20260812-1');background-repeat:no-repeat;background-size:800% 100%;background-position:calc(var(--pos) * 100% / 7) center;background-color:var(--soft)}
+          .portfolio-slide::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(37,33,32,.18),transparent 38%);pointer-events:none}
+          .portfolio-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:4;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:rgba(255,253,250,.94);color:var(--ink);display:grid;place-items:center;font-size:25px;line-height:1;box-shadow:var(--shadow);transition:.2s}
+          .portfolio-nav:hover{background:var(--soft);transform:translateY(-50%) scale(1.04)}
+          .portfolio-prev{left:-62px}.portfolio-next{right:-62px}
+          .portfolio-dots{display:flex;justify-content:center;gap:8px;margin-top:18px}
+          .portfolio-dot{width:8px;height:8px;border:0;border-radius:50%;padding:0;background:var(--line);transition:.2s}
+          .portfolio-dot.active{width:24px;border-radius:999px;background:var(--accent)}
+          .portfolio-swipe-hint{text-align:center;color:var(--muted);font-size:12px;margin-top:10px}
+          @media(max-width:900px){.portfolio-nav{display:none}.portfolio-carousel{max-width:620px}}
+          @media(max-width:768px){.portfolio-carousel{margin:0 -4px}.portfolio-viewport{border-radius:var(--radius-sm)}.portfolio-swipe-hint{display:block}}
+          '''
+          css = '\n'.join(line.strip() for line in css.splitlines())
           if '/* Réalisations swipe gallery */' not in text:
               text = text.replace('/* About / Meet Sandra */', css + '\n/* About / Meet Sandra */', 1)
 
-          gallery = r'''<!-- PORTFOLIO -->
-<section class="public section" id="portfolio" style="padding-bottom:0">
-  <div class="reveal">
-    <div class="eyebrow">Portfolio</div>
-    <h2 class="section-title">Mes <em>réalisations</em></h2>
-    <p class="section-subtitle">Faites glisser pour découvrir quelques-unes des créations réalisées par Sandra.</p>
-  </div>
-  <div class="portfolio-carousel reveal" id="portfolioCarousel">
-    <button class="portfolio-nav portfolio-prev" type="button" aria-label="Photo précédente">‹</button>
-    <div class="portfolio-viewport">
-      <div class="portfolio-track" id="portfolioTrack" aria-label="Galerie des réalisations">
-        <div class="portfolio-slide" style="--pos:0" role="img" aria-label="Réalisation Nail by Sandra 1"></div>
-        <div class="portfolio-slide" style="--pos:1" role="img" aria-label="Réalisation Nail by Sandra 2"></div>
-        <div class="portfolio-slide" style="--pos:2" role="img" aria-label="Réalisation Nail by Sandra 3"></div>
-        <div class="portfolio-slide" style="--pos:3" role="img" aria-label="Réalisation Nail by Sandra 4"></div>
-        <div class="portfolio-slide" style="--pos:4" role="img" aria-label="Réalisation Nail by Sandra 5"></div>
-        <div class="portfolio-slide" style="--pos:5" role="img" aria-label="Réalisation Nail by Sandra 6"></div>
-        <div class="portfolio-slide" style="--pos:6" role="img" aria-label="Réalisation Nail by Sandra 7"></div>
-        <div class="portfolio-slide" style="--pos:7" role="img" aria-label="Réalisation Nail by Sandra 8"></div>
-      </div>
-    </div>
-    <button class="portfolio-nav portfolio-next" type="button" aria-label="Photo suivante">›</button>
-    <div class="portfolio-dots" id="portfolioDots" aria-label="Navigation de la galerie"></div>
-    <div class="portfolio-swipe-hint">Glissez pour passer d’une photo à l’autre</div>
-  </div>
-</section>
+          gallery = '''<!-- PORTFOLIO -->
+          <section class="public section" id="portfolio" style="padding-bottom:0">
+            <div class="reveal">
+              <div class="eyebrow">Portfolio</div>
+              <h2 class="section-title">Mes <em>réalisations</em></h2>
+              <p class="section-subtitle">Faites glisser pour découvrir quelques-unes des créations réalisées par Sandra.</p>
+            </div>
+            <div class="portfolio-carousel reveal" id="portfolioCarousel">
+              <button class="portfolio-nav portfolio-prev" type="button" aria-label="Photo précédente">‹</button>
+              <div class="portfolio-viewport">
+                <div class="portfolio-track" id="portfolioTrack" aria-label="Galerie des réalisations">
+                  <div class="portfolio-slide" style="--pos:0" role="img" aria-label="Réalisation Nail by Sandra 1"></div>
+                  <div class="portfolio-slide" style="--pos:1" role="img" aria-label="Réalisation Nail by Sandra 2"></div>
+                  <div class="portfolio-slide" style="--pos:2" role="img" aria-label="Réalisation Nail by Sandra 3"></div>
+                  <div class="portfolio-slide" style="--pos:3" role="img" aria-label="Réalisation Nail by Sandra 4"></div>
+                  <div class="portfolio-slide" style="--pos:4" role="img" aria-label="Réalisation Nail by Sandra 5"></div>
+                  <div class="portfolio-slide" style="--pos:5" role="img" aria-label="Réalisation Nail by Sandra 6"></div>
+                  <div class="portfolio-slide" style="--pos:6" role="img" aria-label="Réalisation Nail by Sandra 7"></div>
+                  <div class="portfolio-slide" style="--pos:7" role="img" aria-label="Réalisation Nail by Sandra 8"></div>
+                </div>
+              </div>
+              <button class="portfolio-nav portfolio-next" type="button" aria-label="Photo suivante">›</button>
+              <div class="portfolio-dots" id="portfolioDots" aria-label="Navigation de la galerie"></div>
+              <div class="portfolio-swipe-hint">Glissez pour passer d’une photo à l’autre</div>
+            </div>
+          </section>
 
-<!-- MEET SANDRA -->'''
+          <!-- MEET SANDRA -->'''
+          gallery = '\n'.join(line.strip() for line in gallery.splitlines())
           text, count = re.subn(r'<!-- PORTFOLIO -->.*?<!-- MEET SANDRA -->', gallery, text, count=1, flags=re.S)
           if count != 1:
               raise SystemExit('Portfolio section not found')
 
-          js = r'''
-// ===== PORTFOLIO SWIPE =====
-(function(){
-  const track=document.getElementById('portfolioTrack');
-  const carousel=document.getElementById('portfolioCarousel');
-  const dotsWrap=document.getElementById('portfolioDots');
-  if(!track||!carousel||!dotsWrap)return;
-  const slides=[...track.querySelectorAll('.portfolio-slide')];
-  slides.forEach((_,i)=>{
-    const d=document.createElement('button');
-    d.type='button';d.className='portfolio-dot'+(i===0?' active':'');
-    d.setAttribute('aria-label',`Voir la photo ${i+1}`);
-    d.onclick=()=>track.scrollTo({left:i*track.clientWidth,behavior:'smooth'});
-    dotsWrap.appendChild(d);
-  });
-  const dots=[...dotsWrap.children];
-  function setActive(){
-    const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
-    dots.forEach((d,n)=>d.classList.toggle('active',n===i));
-  }
-  track.addEventListener('scroll',()=>requestAnimationFrame(setActive),{passive:true});
-  carousel.querySelector('.portfolio-prev').onclick=()=>track.scrollBy({left:-track.clientWidth,behavior:'smooth'});
-  carousel.querySelector('.portfolio-next').onclick=()=>track.scrollBy({left:track.clientWidth,behavior:'smooth'});
-  window.addEventListener('resize',setActive);
-})();
-'''
+          js = '''
+          // ===== PORTFOLIO SWIPE =====
+          (function(){
+            const track=document.getElementById('portfolioTrack');
+            const carousel=document.getElementById('portfolioCarousel');
+            const dotsWrap=document.getElementById('portfolioDots');
+            if(!track||!carousel||!dotsWrap)return;
+            const slides=[...track.querySelectorAll('.portfolio-slide')];
+            slides.forEach((_,i)=>{
+              const d=document.createElement('button');
+              d.type='button'; d.className='portfolio-dot'+(i===0?' active':'');
+              d.setAttribute('aria-label',`Voir la photo ${i+1}`);
+              d.onclick=()=>track.scrollTo({left:i*track.clientWidth,behavior:'smooth'});
+              dotsWrap.appendChild(d);
+            });
+            const dots=[...dotsWrap.children];
+            function setActive(){
+              const i=Math.max(0,Math.min(slides.length-1,Math.round(track.scrollLeft/Math.max(track.clientWidth,1))));
+              dots.forEach((d,n)=>d.classList.toggle('active',n===i));
+            }
+            track.addEventListener('scroll',()=>requestAnimationFrame(setActive),{passive:true});
+            carousel.querySelector('.portfolio-prev').onclick=()=>track.scrollBy({left:-track.clientWidth,behavior:'smooth'});
+            carousel.querySelector('.portfolio-next').onclick=()=>track.scrollBy({left:track.clientWidth,behavior:'smooth'});
+            window.addEventListener('resize',setActive);
+          })();
+          '''
+          js = '\n'.join(line.strip() for line in js.splitlines())
           if '// ===== PORTFOLIO SWIPE =====' not in text:
               text = text.replace('</script>\n</body>', js + '\n</script>\n</body>', 1)
 
@@ -122,5 +125,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Add swipe gallery with Sandra's nail photos"
+          git commit -m "Add swipe gallery with Sandra nail photos"
           git push
