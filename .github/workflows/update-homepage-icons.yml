@@ -1,0 +1,57 @@
+name: Update homepage trust icons
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/update-homepage-icons.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-homepage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update homepage text and trust icons
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+
+          s = s.replace('      <div class="hero-badge"><span class="dot"></span>Nouvelles clientes bienvenues</div>\n', '')
+
+          replacements = {
+            '<div class="trust-icon">&#x2728;</div>': '''<div class="trust-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2h4M10 2v4.2c0 .5-.15.9-.45 1.3L7.3 10.8A3 3 0 0 0 6.5 13v6A3 3 0 0 0 9.5 22h5a3 3 0 0 0 3-3v-6a3 3 0 0 0-.8-2.2l-2.25-2.3c-.3-.4-.45-.8-.45-1.3V2"/><path d="M7 16h10"/></svg></div>''',
+            '<div class="trust-icon">&#x1F9FC;</div>': '''<div class="trust-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 3v6c0 5-3.2 8.7-7 11-3.8-2.3-7-6-7-11V5l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>''',
+            '<div class="trust-icon">&#x1F4B3;</div>': '''<div class="trust-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M2.5 9.5h19"/><path d="M6 15h4"/></svg></div>''',
+            '<div class="trust-icon">&#x1F495;</div>': '''<div class="trust-icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>'''
+          }
+
+          for old, new in replacements.items():
+              if old not in s:
+                  raise SystemExit(f'Missing expected icon markup: {old}')
+              s = s.replace(old, new, 1)
+
+          p.write_text(s)
+          PY
+
+      - name: Commit homepage updates
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          if git diff --cached --quiet; then
+            echo 'Nothing to commit.'
+            exit 0
+          fi
+          git commit -m 'Simplify homepage and replace trust icons'
+          git push origin HEAD:main
