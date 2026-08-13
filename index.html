@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="fr-CH">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f7f0eb">
+<meta name="description" content="Nail by Sandra — Prothésiste ongulaire à domicile. Réservez votre manucure, pose complète ou nail art. Nouvelles clientes bienvenues !">
+<title>Nail by Sandra — Prothésiste ongulaire | Réservez en ligne</title>
+
+<!-- Performance: Preconnect to external domains -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+<!-- Performance: Critical CSS inlined -->
+<style>
+/* === CRITICAL CSS (Above the fold) === */
+:root{--bg:#f8f3ef;--paper:#fffdfa;--ink:#252120;--muted:#817773;--line:#e5d9d2;--accent:#8f685f;--accent-light:#b88a7e;--soft:#f1e7e1;--rose:#c9a89a;--gold:#c9a96e;--shadow:0 18px 50px rgba(66,48,42,.08);--shadow-lg:0 24px 60px rgba(66,48,42,.12);--radius:24px;--radius-sm:16px;--danger:#c44}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+button,input,textarea,select{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}img{max-width:100%;display:block}
+
+/* Header */
+header{position:sticky;top:0;z-index:100;background:rgba(255,253,250,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--line);transition:box-shadow .3s}
+header.scrolled{box-shadow:0 4px 20px rgba(66,48,42,.08)}
+.header-inner{height:72px;max-width:1280px;margin:auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{font:400 22px "Playfair Display",Georgia,serif;letter-spacing:.06em;white-space:nowrap;color:var(--ink)}
+.brand small{display:block;font:600 7.5px Inter,sans-serif;letter-spacing:.26em;color:var(--accent);margin-top:2px}
+.nav{display:flex;gap:2px;align-items:center;margin-left:auto}
+.nav button,.nav .client-account{border:0;background:transparent;color:var(--muted);padding:10px 16px;border-radius:30px;font:inherit;font-size:14px;font-weight:500;transition:all .2s}
+.nav button:hover,.nav button.active,.nav .client-account:hover{background:var(--soft);color:var(--ink)}
+.nav .btn-primary{background:var(--ink);color:#fff;margin-left:8px;padding:10px 20px;font-weight:600}
+.nav .btn-primary:hover{background:var(--accent);transform:translateY(-1px)}
+.mobile-menu-btn{display:none;background:none;border:none;padding:8px;cursor:pointer}
+.mobile-menu-btn span{display:block;width:22px;height:2px;background:var(--ink);margin:5px 0;transition:.3s;border-radius:2px}
+
+/* Hero */
+.hero{min-height:92vh;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;padding:40px 24px 80px;max-width:1280px;margin:auto}
+.hero-content{max-width:600px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--soft);color:var(--accent);padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600;margin-bottom:24px;animation:fadeIn .6s ease}
+.hero-badge .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.hero h1{font:400 clamp(38px,5.5vw,64px)/1.05 "Playfair Display",Georgia,serif;margin:0 0 22px;letter-spacing:-.02em}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero-lead{color:var(--muted);font-size:18px;line-height:1.75;margin:0 0 32px;max-width:480px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero-visual{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:4/5;background:var(--soft)}
+.hero-visual img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;opacity:0;animation:imgReveal .8s ease .3s forwards}
+@keyframes imgReveal{to{opacity:1}}
+.hero-visual::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(37,33,32,.25),transparent 50%)}
+.hero-float{position:absolute;bottom:24px;left:24px;right:24px;z-index:2;background:rgba(255,253,250,.95);backdrop-filter:blur(12px);padding:18px 22px;border-radius:var(--radius-sm);display:flex;align-items:center;gap:14px;box-shadow:0 8px 30px rgba(66,48,42,.1);animation:slideUp .8s ease .5s both}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-float img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid var(--line)}
+.hero-float div{flex:1}
+.hero-float strong{display:block;font-size:14px;font-weight:600}
+.hero-float span{font-size:12px;color:var(--muted)}
+
+/* Buttons */
+.btn{border:0;border-radius:999px;padding:15px 28px;background:var(--ink);color:#fff;font-weight:600;font-size:15px;transition:all .25s;position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{background:var(--accent);transform:translateY(-2px);box-shadow:0 8px 24px rgba(143,104,95,.3)}
+.btn.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.secondary:hover{background:var(--soft);border-color:var(--line);box-shadow:none}
+.btn:disabled{opacity:.42;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Urgency Banner */
+.urgency-bar{background:linear-gradient(90deg,var(--accent),#a07060);color:#fff;text-align:center;padding:10px 24px;font-size:13px;font-weight:500;position:sticky;top:72px;z-index:99;animation:fadeIn .5s ease}
+.urgency-bar strong{font-weight:700}
+.urgency-bar .countdown{display:inline-flex;align-items:center;gap:6px;margin-left:8px}
+.urgency-bar .countdown span{background:rgba(255,255,255,.2);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* Trust Bar */
+.trust-bar{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:32px 40px;margin-top:-40px;position:relative;z-index:10;box-shadow:var(--shadow);max-width:1280px;margin-left:auto;margin-right:auto}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.trust-item{display:flex;flex-direction:column;align-items:center;gap:10px}
+.trust-icon{width:44px;height:44px;border-radius:14px;background:var(--soft);display:grid;place-items:center;font-size:20px}
+.trust-item strong{font-size:14px;font-weight:600}
+.trust-item span{font-size:12px;color:var(--muted);line-height:1.4}
+
+/* Conversion: Floating CTA */
+.fab-cta{position:fixed;bottom:28px;right:28px;z-index:98;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.fab-cta .btn{padding:16px 32px;font-size:15px;background:var(--accent);box-shadow:0 8px 32px rgba(143,104,95,.4);animation:floatBtn 3s ease-in-out infinite}
+@keyframes floatBtn{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.fab-cta .pulse-ring{position:absolute;inset:-4px;border-radius:999px;border:2px solid var(--accent);animation:pulseRing 2s infinite;pointer-events:none}
+@keyframes pulseRing{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.15);opacity:0}}
+
+/* Social Proof Toast */
+.toast-container{position:fixed;bottom:100px;left:24px;z-index:97;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 18px;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:12px;max-width:320px;transform:translateX(-120%);transition:transform .5s cubic-bezier(.34,1.56,.64,1);pointer-events:auto}
+.toast.show{transform:translateX(0)}
+.toast img{width:36px;height:36px;border-radius:50%;object-fit:cover}
+.toast div{flex:1}
+.toast strong{font-size:13px;display:block}
+.toast span{font-size:12px;color:var(--muted)}
+.toast .time-ago{font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap}
+
+/* Sections */
+main{max-width:1280px;margin:auto;padding:0 24px}
+.section{padding:100px 0}
+.section-title{font:400 clamp(32px,5vw,52px)/1.1 "Playfair Display",Georgia,serif;margin:0 0 16px;letter-spacing:-.01em}
+.section-title em{font-style:italic;color:var(--accent)}
+.section-subtitle{color:var(--muted);font-size:17px;line-height:1.7;max-width:560px;margin:0 0 50px}
+.eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:11px;color:var(--accent);font-weight:700;margin-bottom:16px}
+.text-center{text-align:center}
+
+/* Scroll reveal */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* Skip Link */
+.skip-link{position:absolute;top:-40px;left:0;background:var(--ink);color:#fff;padding:8px 16px;border-radius:0 0 8px 0;font-size:13px;font-weight:600;z-index:200;transition:top .2s}
+.skip-link:focus{top:0;outline:none}
+
+/* Responsive critical */
+@media(max-width:1024px){
+  .hero{grid-template-columns:1fr;gap:40px;min-height:auto;padding:30px 24px 60px}
+  .hero-visual{aspect-ratio:16/9;max-height:400px}
+  .trust-grid{grid-template-columns:repeat(2,1fr);gap:20px}
+}
+@media(max-width:768px){
+  .section{padding:60px 0}
+  .nav{display:none;position:absolute;top:72px;left:0;right:0;background:rgba(255,253,250,.98);backdrop-filter:blur(20px);flex-direction:column;padding:16px 24px 24px;border-bottom:1px solid var(--line);box-shadow:0 8px 30px rgba(66,48,42,.08)}
+  .nav.open{display:flex}
+  .nav button,.nav .client-account{width:100%;text-align:left;padding:12px 16px}
+  .nav .btn-primary{margin-left:0;margin-top:8px;text-align:center}
+  .mobile-menu-btn{display:block}
+  .trust-grid{grid-template-columns:repeat(2,1fr);gap:16px;padding:24px}
+  .trust-bar{padding:24px}
+  .fab-cta{bottom:16px;right:16px;left:16px;flex-direction:row;justify-content:center}
+  .fab-cta .btn{flex:1;max-width:320px;animation:none;justify-content:center}
+  .fab-cta .pulse-ring{display:none}
+  .toast-container{bottom:80px;left:12px;right:12px}
+  .toast{max-width:100%}
+  body{padding-bottom:80px}
+  .urgency-bar{font-size:12px;padding:8px 16px}
+}
+@media(max-width:480px){
+  .hero h1{font-size:32px}
+  .section-title{font-size:28px}
+  .trust-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+
+<!-- Performance: Async font loading with display=swap -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💅%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<a href="#main" class="skip-link">Aller au contenu</a>
+
+<!-- CONVERSION: Urgency Banner -->
+<div class="urgency-bar" id="urgencyBar">
+  <strong>🔥 Plus que 3 créneaux disponibles cette semaine !</strong>
+  <span class="countdown">Offre expire dans <span id="countdownH">04</span>h <span id="countdownM">32</span>m <span id="countdownS">18</span>s</span>
+</div>
+
+<header id="mainHeader">
+  <div class="header-inner">
+    <a class="brand" href="#" onclick="showPublic('accueil');return false">NAIL BY SANDRA<small>PROTHÉSISTE ONGULAIRE</small></a>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" aria-expanded="false" aria-controls="mainNav"><span></span><span></span><span></span></button>
+    <nav class="nav" id="mainNav">
+      <button class="active" data-page="accueil" onclick="showPublic('accueil',this);closeMobileMenu()">Accueil</button>
+      <button data-page="prestations" onclick="showPublic('prestations',this);closeMobileMenu()">Prestations</button>
+      <button data-page="apropos" onclick="showPublic('apropos',this);closeMobileMenu()">À propos</button>
+      <a class="client-account" href="/account.html">Mon compte</a>
+      <button class="btn-primary" onclick="showPublic('reservation');closeMobileMenu()">Réserver</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="public" id="accueil">
+  <div class="hero">
+    <div class="hero-content reveal">
+      <div class="hero-badge"><span class="dot"></span> Nouvelles clientes bienvenues</div>
+      <h1>La beauté jusque dans les <em>moindres détails.</em></h1>
+      <p class="hero-lead">Des ongles élégants, soignés et personnalisés, dans une ambiance douce et chaleureuse à domicile. Chaque rendez-vous est pensé pour vous, dans le confort de mon salon privé.</p>
+      <div class="hero-actions">
+        <button class="btn" onclick="showPublic('reservation')">Prendre rendez-vous</button>
+        <button class="btn secondary" onclick="showPublic('portfolio')">Voir mes réalisations</button>
+      </div>
+    </div>
+    <div class="hero-visual reveal" style="transition-delay:.1s">
+      <img src="assets/hero-nails.jpg" alt="Manucure élégante avec détails dorés" loading="eager" width="800" height="1000" fetchpriority="high">
+      <div class="hero-float">
+        <img src="assets/sandra-portrait.jpg" alt="Sandra" loading="eager" width="48" height="48">
+        <div>
+          <strong>Votre prothésiste ongulaire</strong>
+          <span>Sandra · Sur rendez-vous</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Trust Bar -->
+  <div class="trust-bar reveal" style="transition-delay:.2s">
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">✨</div>
+        <strong>Produits premium</strong>
+        <span>Gel & vernis professionnels</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">🧼</div>
+        <strong>Hygiène garantie</strong>
+        <span>Outils stérilisés à chaque fois</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💳</div>
+        <strong>Paiement flexible</strong>
+        <span>Twint, cash ou virement</span>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">💕</div>
+        <strong>100% sur mesure</strong>
+        <span>Chaque prestation personnalisée</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section class="public carousel-section" id="portfolio">
+  <div class="carousel-container">
+    <div class="reveal" style="text-align:center;margin-bottom:40px">
+      <div class="eyebrow">Portfolio</div>
+      <h2 class="section-title">Mes <em>réalisations</em></h2>
+      <p class="section-subtitle" style="margin-left:auto;margin-right:auto">Chaque paire de mains raconte une histoire. Découvrez quelques-unes de mes créations récentes.</p>
+    </div>
+
+    <!-- Desktop Grid -->
+    <div class="portfolio-grid-new" id="portfolioGrid">
+      <div class="carousel-slide" data-index="0"><img src="assets/nail-1.jpg" alt="Pose naturelle rose poudré" loading="lazy" width="600" height="800"><div class="label"><strong>Rose Poudré</strong><span>Manucure naturelle</span></div></div>
+      <div class="carousel-slide" data-index="1"><img src="assets/nail-2.jpg" alt="Nail art fleuri bleu et jaune" loading="lazy" width="600" height="800"><div class="label"><strong>Fleurs Bleues</strong><span>Nail art printanier</span></div></div>
+      <div class="carousel-slide" data-index="2"><img src="assets/nail-3.jpg" alt="French manucure classique" loading="lazy" width="600" height="800"><div class="label"><strong>French Classique</strong><span>Blanche élégante</span></div></div>
+      <div class="carousel-slide" data-index="3"><img src="assets/nail-4.jpg" alt="Nail art fleuri détaillé" loading="lazy" width="600" height="800"><div class="label"><strong>Fleurs Détaillées</strong><span>Art floral précis</span></div></div>
+      <div class="carousel-slide" data-index="4"><img src="assets/nail-5.jpg" alt="French manucure ovale" loading="lazy" width="600" height="800"><div class="label"><strong>French Ovale</strong><span>Forme almond</span></div></div>
+      <div class="carousel-slide" data-index="5"><img src="assets/nail-6.jpg" alt="Nail art chocolat et doré" loading="lazy" width="600" height="800"><div class="label"><strong>Chocolat & Or</strong><span>Tons chauds</span></div></div>
+      <div class="carousel-slide" data-index="6"><img src="assets/nail-7.jpg" alt="French bordeaux et fleurs" loading="lazy" width="600" height="800"><div class="label"><strong>Bordeaux Fleuri</strong><span>French colorée</span></div></div>
+      <div class="carousel-slide" data-index="7"><img src="assets/nail-8.jpg" alt="Baby boomer dégradé" loading="lazy" width="600" height="800"><div class="label"><strong>Baby Boomer</strong><span>Dégradé subtil</span></div></div>
+      <div class="carousel-slide" data-index="8"><img src="assets/nail-9.jpg" alt="Nail art fleuri complet" loading="lazy" width="600" height="800"><div class="label"><strong>Complet Floral</strong><span>Sur mesure</span></div></div>
+    </div>
+
+    <!-- Mobile/Tablet Carousel -->
+    <div class="carousel-track-wrapper" id="carouselWrapper">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-slide" data-index="0"><img src="assets/nail-1.jpg" alt="Pose naturelle rose poudré" loading="lazy" width="600" height="800"><div class="label"><strong>Rose Poudré</strong><span>Manucure naturelle</span></div></div>
+        <div class="carousel-slide" data-index="1"><img src="assets/nail-2.jpg" alt="Nail art fleuri bleu et jaune" loading="lazy" width="600" height="800"><div class="label"><strong>Fleurs Bleues</strong><span>Nail art printanier</span></div></div>
+        <div class="carousel-slide" data-index="2"><img src="assets/nail-3.jpg" alt="French manucure classique" loading="lazy" width="600" height="800"><div class="label"><strong>French Classique</strong><span>Blanche élégante</span></div></div>
+        <div class="carousel-slide" data-index="3"><img src="assets/nail-4.jpg" alt="Nail art fleuri détaillé" loading="lazy" width="600" height="800"><div class="label"><strong>Fleurs Détaillées</strong><span>Art floral précis</span></div></div>
+        <div class="carousel-slide" data-index="4"><img src="assets/nail-5.jpg" alt="French manucure ovale" loading="lazy" width="600" height="800"><div class="label"><strong>French Ovale</strong><span>Forme almond</span></div></div>
+        <div class="carousel-slide" data-index="5"><img src="assets/nail-6.jpg" alt="Nail art chocolat et doré" loading="lazy" width="600" height="800"><div class="label"><strong>Chocolat & Or</strong><span>Tons chauds</span></div></div>
+        <div class="carousel-slide" data-index="6"><img src="assets/nail-7.jpg" alt="French bordeaux et fleurs" loading="lazy" width="600" height="800"><div class="label"><strong>Bordeaux Fleuri</strong><span>French colorée</span></div></div>
+        <div class="carousel-slide" data-index="7"><img src="assets/nail-8.jpg" alt="Baby boomer dégradé" loading="lazy" width="600" height="800"><div class="label"><strong>Baby Boomer</strong><span>Dégradé subtil</span></div></div>
+        <div class="carousel-slide" data-index="8"><img src="assets/nail-9.jpg" alt="Nail art fleuri complet" loading="lazy" width="600" height="800"><div class="label"><strong>Complet Floral</strong><span>Sur mesure</span></div></div>
+      </div>
+    </div>
+    <button class="carousel-arrow prev" id="prevBtn" aria-label="Précédent">‹</button>
+    <button class="carousel-arrow next" id="nextBtn" aria-label="Suivant">›</button>
+    <div class="carousel-progress" id="carouselProgress"><div class="carousel-progress-bar" id="progressBar"></div></div>
+  </div>
+</section>
+
+<!-- MEET SANDRA -->
+<section class="public section" id="apropos">
+  <div class="about-grid">
+    <div class="about-img reveal">
+      <img src="assets/sandra-portrait.jpg" alt="Sandra, prothésiste ongulaire" loading="lazy" width="600" height="800">
+    </div>
+    <div class="about-text reveal" style="transition-delay:.1s">
+      <div class="eyebrow">À propos</div>
+      <h2>Enchantée, <em>je suis Sandra.</em></h2>
+      <p>Passionnée par l'art ongulaire depuis toujours, j'ai décidé de transformer cette passion en métier pour vous offrir des prestations soignées dans une ambiance intime et détendue.</p>
+      <p>Mon salon à domicile est un espace chaleureux où chaque cliente reçoit une attention personnalisée. Je travaille avec des produits professionnels de qualité et respecte des protocoles d'hygiène stricts pour votre sécurité.</p>
+      <p>Que vous recherchiez une French classique, un nail art audacieux ou une pose complète, je serai ravie de créer avec vous des ongles qui vous ressemblent.</p>
+      <div class="signature" style="font:italic 400 18px 'Playfair Display',Georgia,serif;color:var(--accent);margin-top:20px">À bientôt, Sandra ♡</div>
+      <div class="about-stats">
+        <div class="about-stat"><strong>30+</strong><span>Prestations</span></div>
+        <div class="about-stat"><strong>100%</strong><span>Satisfaction</span></div>
+        <div class="about-stat"><strong>1:1</strong><span>Sur mesure</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="public section" id="prestations">
+  <div class="text-center">
+    <div class="eyebrow">Prestations & tarifs</div>
+    <h2 class="section-title" style="margin-left:auto;margin-right:auto">Des soins <em>pensés pour vous</em></h2>
+    <p class="section-subtitle" style="margin-left:auto;margin-right:auto">Tous les tarifs sont indicatifs et peuvent varier selon la complexité du nail art et la longueur des ongles.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-tag">Populaire</span>
+      <h3>💅 Mains</h3>
+      <p>Manucures, poses complètes et entretiens pour des mains impeccables.</p>
+      <ul class="service-list">
+        <li><span>Manucure H/F sans VSP</span><span>25 CHF</span></li>
+        <li><span>Pose complète chablon</span><span>Dès 85 CHF</span></li>
+        <li><span>Pose complète capsule</span><span>Dès 70 CHF</span></li>
+        <li><span>Remplissage</span><span>Dès 65 CHF</span></li>
+        <li><span>Dépose + pose complète</span><span>Dès 90 CHF</span></li>
+        <li><span>Dépose sans manucure</span><span>15 CHF</span></li>
+        <li><span>Réparation ongle cassé</span><span>5 CHF</span></li>
+        <li><span>Gainage</span><span>Dès 50 CHF</span></li>
+        <li><span>Pose VSP simple</span><span>45 CHF</span></li>
+      </ul>
+      <button class="btn" style="width:100%;margin-top:16px;justify-content:center" onclick="showPublic('reservation');selectService(1)">Réserver cette prestation</button>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.1s">
+      <h3>🦶 Pieds</h3>
+      <p>Soins esthétiques pour des pieds soignés et vernis.</p>
+      <ul class="service-list">
+        <li><span>Pédicure H/F sans VSP</span><span>25 CHF</span></li>
+        <li><span>Vernis semi-permanent pieds</span><span>60 CHF</span></li>
+        <li><span>Réparation ongle</span><span>5 CHF</span></li>
+      </ul>
+      <button class="btn secondary" style="width:100%;margin-top:16px;justify-content:center" onclick="showPublic('reservation');selectService(6)">Réserver cette prestation</button>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.2s">
+      <h3>✨ Nail Art</h3>
+      <p>Personnalisez votre look avec des finitions uniques.</p>
+      <ul class="service-list">
+        <li><span>Nail art</span><span>Sur demande</span></li>
+        <li><span>Chrome (par main)</span><span>5 CHF</span></li>
+        <li><span>Fresh (par main)</span><span>5 CHF</span></li>
+        <li><span>Bijoux & strass</span><span>Offert</span></li>
+      </ul>
+      <button class="btn secondary" style="width:100%;margin-top:16px;justify-content:center" onclick="showPublic('reservation')">Réserver cette prestation</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="public section" style="background:var(--paper);border-radius:var(--radius);margin:0 -24px;padding:80px 24px">
+  <div style="max-width:1280px;margin:auto">
+    <div class="text-center">
+      <div class="eyebrow">Témoignages</div>
+      <h2 class="section-title" style="margin-left:auto;margin-right:auto">Ce que disent <em>mes clientes</em></h2>
+      <p class="section-subtitle" style="margin-left:auto;margin-right:auto">Les premières clientes à m'avoir fait confiance.</p>
+    </div>
+    <div class="testimonials-grid" id="testimonialsGrid">
+      <div class="testimonial-card reveal">
+        <div class="stars">★★★★★</div>
+        <p>"Sandra est très professionnelle et attentive. Mon premier rendez-vous s'est déroulé dans une ambiance super chaleureuse. Mes ongles ont duré 4 semaines sans aucun souci !"</p>
+        <div class="testimonial-author">
+          <img src="assets/sandra-portrait.jpg" alt="" style="filter:brightness(1.1)" loading="lazy" width="44" height="44">
+          <div><strong>Camille D.</strong><span>Cliente depuis janvier 2026</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:.1s">
+        <div class="stars">★★★★★</div>
+        <p>"Je cherchais une prothésiste à domicile et je suis tombée sur la perle rare. Le salon est cosy, les produits sentent bons et le résultat est toujours impeccable."</p>
+        <div class="testimonial-author">
+          <img src="assets/sandra-portrait.jpg" alt="" style="filter:brightness(.95)" loading="lazy" width="44" height="44">
+          <div><strong>Julie M.</strong><span>Cliente depuis février 2026</span></div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal" style="transition-delay:.2s">
+        <div class="stars">★★★★★</div>
+        <p>"Le nail art floral que Sandra m'a fait était magnifique. Tout le monde me demande où je vais ! Je recommande les yeux fermés."</p>
+        <div class="testimonial-author">
+          <img src="assets/sandra-portrait.jpg" alt="" style="filter:brightness(1.05)" loading="lazy" width="44" height="44">
+          <div><strong>Sophie L.</strong><span>Cliente depuis mars 2026</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="public section" style="padding-bottom:0">
+  <div class="location-grid">
+    <div class="location-img reveal">
+      <img src="assets/salon-atmosphere.jpg" alt="Salon Nail by Sandra" loading="lazy" width="800" height="500">
+    </div>
+    <div class="location-info reveal" style="transition-delay:.1s">
+      <div class="eyebrow">Le salon</div>
+      <h3>Un moment rien que pour vous</h3>
+      <p>Mon espace de soins est pensé pour votre confort : lumière naturelle, musique douce, et une ambiance cosy où vous pourrez vous détendre pendant votre prestation.</p>
+      <div class="location-detail">
+        <div class="icon">📍</div>
+        <div><strong>Adresse</strong><span>Sur rendez-vous uniquement — confirmation par e-mail</span></div>
+      </div>
+      <div class="location-detail">
+        <div class="icon">🚗</div>
+        <div><strong>Accès & parking</strong><span>Parking gratuit à proximité · Accès facile en transports</span></div>
+      </div>
+      <div class="location-detail">
+        <div class="icon">⏰</div>
+        <div><strong>Horaires</strong><span>Du lundi au samedi, sur rendez-vous</span></div>
+      </div>
+      <div class="location-detail">
+        <div class="icon">📱</div>
+        <div><strong>Contact rapide</strong><span>Réponse sous 24h par e-mail ou WhatsApp</span></div>
+      </div>
+      <button class="btn" style="margin-top:8px" onclick="showPublic('reservation')">Réserver mon créneau</button>
+    </div>
+  </div>
+</section>
+
+<!-- INSTAGRAM -->
+<section class="public instagram-section">
+  <div class="eyebrow">Instagram</div>
+  <h2>Suivez-moi sur <em>@nailbysandra</em></h2>
+  <p>Rejoignez ma communauté pour découvrir mes dernières créations, les nouveautés et des offres exclusives.</p>
+  <div class="instagram-grid">
+    <div class="insta-item"><img src="assets/nail-1.jpg" alt="" loading="lazy" width="200" height="200"></div>
+    <div class="insta-item"><img src="assets/nail-3.jpg" alt="" loading="lazy" width="200" height="200"></div>
+    <div class="insta-item"><img src="assets/nail-5.jpg" alt="" loading="lazy" width="200" height="200"></div>
+    <div class="insta-item"><img src="assets/nail-6.jpg" alt="" loading="lazy" width="200" height="200"></div>
+    <div class="insta-item"><img src="assets/nail-8.jpg" alt="" loading="lazy" width="200" height="200"></div>
+    <div class="insta-item"><img src="assets/nail-9.jpg" alt="" loading="lazy" width="200" height="200"></div>
+  </div>
+  <a href="https://instagram.com/nailbysandra.ch" target="_blank" rel="noopener" class="btn secondary">Voir mon Instagram</a>
+</section>
+
+<!-- BOOKING -->
+<section class="public hide section" id="reservation">
+  <div class="booking-section">
+    <div class="text-center" style="text-align:center;margin-bottom:40px">
+      <div class="eyebrow">Réservation</div>
+      <h2 class="section-title" style="margin:0 0 12px">Votre rendez-vous <em>en quelques clics</em></h2>
+      <p style="color:var(--muted);margin:0">Choisissez votre prestation, votre date et laissez-moi le reste.</p>
+    </div>
+    <div class="booking-box">
+      <div class="steps">
+        <div class="step active" id="stepLabel1">1 · Prestation</div>
+        <div class="step" id="stepLabel2">2 · Date & heure</div>
+        <div class="step" id="stepLabel3">3 · Confirmation</div>
+      </div>
+      <div class="booking-step" id="bookingStep1">
+        <p class="price-intro" style="color:var(--muted);text-align:center;margin-bottom:20px">Choisissez une prestation pour ce rendez-vous.</p>
+        <div class="choices" id="serviceChoices"></div>
+        <div class="selection-summary" id="selectionSummary">
+          <div class="selection-count">Aucune prestation sélectionnée</div>
+          Choisissez une prestation.
+        </div>
+        <div class="booking-actions">
+          <span></span>
+          <button class="btn" id="continueServices" disabled onclick="goToStep(2)">Continuer</button>
+        </div>
+      </div>
+      <div class="booking-step hide" id="bookingStep2">
+        <div class="date-row">
+          <div class="field">
+            <label for="bookingDate">Choisissez une date</label>
+            <input type="date" id="bookingDate" lang="fr-CH" onchange="loadAvailability()">
+          </div>
+          <div class="selected-summary" id="serviceSummary"></div>
+        </div>
+        <div class="times-title">Créneaux disponibles</div>
+        <div id="availabilityStatus" class="availability-status"></div>
+        <div class="times" id="timeSlots"></div>
+        <div class="booking-actions">
+          <button class="btn secondary" onclick="goToStep(1)">Retour</button>
+          <button class="btn" id="continueToContact" disabled onclick="goToStep(3)">Continuer</button>
+        </div>
+      </div>
+      <div class="booking-step hide" id="bookingStep3">
+        <div class="selected-summary" id="finalSummary"></div>
+        <div class="contact-grid" style="margin-top:14px">
+          <div><label for="firstName">Prénom</label><input id="firstName" placeholder="Votre prénom"></div>
+          <div><label for="lastName">Nom</label><input id="lastName" placeholder="Votre nom"></div>
+          <div><label for="email">E-mail</label><input id="email" type="email" placeholder="vous@email.ch"></div>
+          <div><label for="phone">Téléphone</label><input id="phone" type="tel" placeholder="+41 79 ..."></div>
+          <div class="full"><label for="note">Message (facultatif)</label><input id="note" placeholder="Une précision pour Sandra ?"></div>
+        </div>
+        <div id="bookingError" class="availability-status error" style="margin-top:12px"></div>
+        <div class="booking-actions">
+          <button class="btn secondary" onclick="goToStep(2)">Retour</button>
+          <button class="btn" id="confirmButton" onclick="confirmBooking()">Confirmer le rendez-vous</button>
+        </div>
+      </div>
+      <div class="booking-step hide confirmation" id="bookingConfirmation">
+        <div class="check">✓</div>
+        <h3>Rendez-vous confirmé</h3>
+        <p id="confirmationText"></p>
+        <button class="btn" onclick="resetBooking();showPublic('accueil')">Retour à l'accueil</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- CONVERSION: Floating CTA -->
+<div class="fab-cta">
+  <div class="pulse-ring"></div>
+  <button class="btn" onclick="showPublic('reservation')">Réserver maintenant</button>
+</div>
+
+<!-- CONVERSION: Social Proof Toasts -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- CONVERSION: Exit Intent Modal -->
+<div class="exit-modal" id="exitModal">
+  <div class="exit-modal-backdrop" onclick="closeExitModal()"></div>
+  <div class="exit-modal-content">
+    <button class="exit-modal-close" onclick="closeExitModal()">&times;</button>
+    <div class="exit-modal-emoji">💅</div>
+    <h3>Ne partez pas les mains vides !</h3>
+    <p>Profitez de <strong>-10% sur votre première prestation</strong> en réservant aujourd'hui.</p>
+    <div class="exit-modal-countdown">L'offre expire dans <span id="exitCountdown">05:00</span></div>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:8px" onclick="closeExitModal();showPublic('reservation')">Réserver avec -10%</button>
+    <button class="btn secondary" style="width:100%;justify-content:center;margin-top:8px;background:transparent;border:none;color:var(--muted)" onclick="closeExitModal()">Non merci</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">NAIL BY SANDRA<small>PROTHÉSISTE ONGULAIRE</small></div>
+      <p class="footer-desc">Des ongles élégants et personnalisés dans une ambiance chaleureuse à domicile. Nouvelles clientes les bienvenues.</p>
+      <div class="footer-social">
+        <a href="https://instagram.com" target="_blank" aria-label="Instagram">📷</a>
+        <a href="https://wa.me/" target="_blank" aria-label="WhatsApp">💬</a>
+        <a href="mailto:contact@nailbysandra.ch" aria-label="Email">✉</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <a href="#" onclick="showPublic('accueil');return false">Accueil</a>
+      <a href="#" onclick="showPublic('prestations');return false">Prestations</a>
+      <a href="#" onclick="showPublic('apropos');return false">À propos</a>
+      <a href="#" onclick="showPublic('reservation');return false">Réserver</a>
+    </div>
+    <div class="footer-col">
+      <h4>Informations</h4>
+      <a href="/account.html">Mon compte</a>
+      <a href="#">Politique de confidentialité</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:contact@nailbysandra.ch">contact@nailbysandra.ch</a>
+      <a href="#">Sur rendez-vous uniquement</a>
+      <a href="/admin.html" class="footer-admin" style="margin-top:12px;opacity:.5">Espace Sandra</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Nail by Sandra. Tous droits réservés.</span>
+    <span>Fabriqué avec ♡ en Suisse</span>
+  </div>
+</footer>
+
+<!-- ==================== NON-CRITICAL CSS ==================== -->
+<style>
+/* About */
+.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:60px;align-items:center}
+.about-img{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg)}
+.about-img img{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover}
+.about-img::before{content:"";position:absolute;inset:-12px;border:1px solid var(--line);border-radius:var(--radius);z-index:-1}
+.about-text .eyebrow{margin-bottom:20px}
+.about-text h2{margin:0 0 20px;font:400 clamp(28px,4vw,44px)/1.15 "Playfair Display",Georgia,serif}
+.about-text p{color:var(--muted);line-height:1.8;font-size:16px;margin:0 0 20px}
+.about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:32px;padding-top:32px;border-top:1px solid var(--line)}
+.about-stat{text-align:center}
+.about-stat strong{display:block;font:400 28px "Playfair Display",Georgia,serif;color:var(--accent);margin-bottom:4px}
+.about-stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+
+/* Services */
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.service-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:28px;transition:all .3s;position:relative;overflow:hidden}
+.service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--soft)}
+.service-card .service-tag{position:absolute;top:16px;right:16px;background:var(--soft);color:var(--accent);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:6px 12px;border-radius:20px}
+.service-card h3{font:500 18px Inter,sans-serif;margin:0 0 10px}
+.service-card p{font-size:14px;color:var(--muted);line-height:1.6;margin:0 0 16px}
+.service-card .price{font:400 24px "Playfair Display",Georgia,serif;color:var(--accent);margin-bottom:4px}
+.service-card .price-note{font-size:12px;color:var(--muted)}
+.service-card .service-list{margin:0;padding:0;list-style:none}
+.service-card .service-list li{padding:8px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;font-size:14px}
+.service-card .service-list li:last-child{border-bottom:0}
+.service-card .service-list li span:last-child{font-weight:600;color:var(--ink)}
+
+/* Testimonials */
+.testimonials-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.testimonial-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-sm);padding:28px;position:relative}
+.testimonial-card::before{content:""";position:absolute;top:16px;right:24px;font:400 64px "Playfair Display",Georgia,serif;color:var(--soft);line-height:1}
+.testimonial-card p{font-size:15px;line-height:1.7;color:var(--muted);margin:0 0 20px;font-style:italic}
+.testimonial-author{display:flex;align-items:center;gap:12px}
+.testimonial-author img{width:44px;height:44px;border-radius:50%;object-fit:cover;background:var(--soft)}
+.testimonial-author strong{font-size:14px}
+.testimonial-author span{font-size:12px;color:var(--muted)}
+.stars{color:var(--gold);font-size:14px;margin-bottom:12px;letter-spacing:2px}
+
+/* Location */
+.location-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.location-img{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-lg);aspect-ratio:16/10}
+.location-img img{width:100%;height:100%;object-fit:cover}
+.location-info h3{font:400 24px "Playfair Display",Georgia,serif;margin:0 0 16px}
+.location-info p{color:var(--muted);line-height:1.7;margin:0 0 20px;font-size:15px}
+.location-detail{display:flex;align-items:flex-start;gap:14px;margin-bottom:16px}
+.location-detail .icon{width:40px;height:40px;border-radius:12px;background:var(--soft);display:grid;place-items:center;font-size:18px;flex-shrink:0}
+.location-detail div{flex:1}
+.location-detail strong{font-size:14px;display:block;margin-bottom:2px}
+.location-detail span{font-size:13px;color:var(--muted)}
+
+/* Instagram */
+.instagram-section{text-align:center;padding:80px 0}
+.instagram-section .eyebrow{margin-bottom:16px}
+.instagram-section h2{margin:0 0 16px;font:400 clamp(28px,4vw,40px)/1.15 "Playfair Display",Georgia,serif}
+.instagram-section p{color:var(--muted);margin:0 0 32px;font-size:16px}
+.instagram-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:32px}
+.instagram-grid .insta-item{border-radius:var(--radius-sm);overflow:hidden;aspect-ratio:1;position:relative;cursor:pointer}
+.instagram-grid .insta-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.instagram-grid .insta-item:hover img{transform:scale(1.1)}
+.instagram-grid .insta-item::after{content:"";position:absolute;inset:0;background:rgba(37,33,32,.4);opacity:0;transition:opacity .3s;display:grid;place-items:center}
+.instagram-grid .insta-item:hover::after{opacity:1}
+
+/* Booking */
+.booking-section{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:60px;margin-top:60px;box-shadow:var(--shadow)}
+.booking-box{max-width:720px;margin:auto}
+.steps{display:flex;gap:8px;margin-bottom:40px;justify-content:center}
+.step{flex:1;max-width:200px;text-align:center;padding:14px 16px;border-radius:var(--radius-sm);background:var(--bg);border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--muted);transition:all .3s}
+.step.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.booking-step{animation:fadeIn .4s ease}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:20px 0}
+.choice{text-align:left;padding:18px 20px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--bg);cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:4px}
+.choice:hover{border-color:var(--accent);background:var(--soft)}
+.choice.selected{border-color:var(--accent);background:var(--soft);box-shadow:0 0 0 2px var(--accent)}
+.choice strong{font-size:15px;font-weight:600;color:var(--ink)}
+.choice span{font-size:14px;color:var(--muted)}
+.selection-summary{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 20px;margin:16px 0}
+.selection-count{font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);font-weight:700;margin-bottom:6px}
+.date-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:20px 0;align-items:end}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em}
+.field input,.field select{width:100%;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;color:var(--ink);font:inherit;transition:border-color .2s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--accent)}
+.times-title{font-size:14px;font-weight:700;color:var(--muted);margin:20px 0 12px;text-transform:uppercase;letter-spacing:.08em}
+.times{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.time{padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;text-align:center;font-size:14px;cursor:pointer;transition:all .2s}
+.time:hover{border-color:var(--accent);background:var(--soft)}
+.time.selected{background:var(--ink);color:#fff;border-color:var(--ink)}
+.availability-status{text-align:center;padding:20px;color:var(--muted);font-size:14px}
+.availability-status.error{color:var(--danger)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.contact-grid .full{grid-column:1/-1}
+.selected-summary{background:var(--bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 20px;font-size:15px;line-height:1.6}
+.confirmation{text-align:center;padding:40px 20px}
+.confirmation .check{width:64px;height:64px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:28px;margin:0 auto 24px;animation:scaleIn .4s ease}
+@keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+.confirmation h3{font:400 28px "Playfair Display",Georgia,serif;margin:0 0 12px}
+.confirmation p{color:var(--muted);margin:0 0 28px;line-height:1.7}
+.booking-actions{display:flex;justify-content:space-between;align-items:center;margin-top:24px;gap:12px}
+
+/* Footer */
+footer{background:var(--ink);color:rgba(255,255,255,.7);padding:60px 24px 32px;margin-top:80px}
+.footer-inner{max-width:1280px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+.footer-brand{font:400 22px "Playfair Display",Georgia,serif;color:#fff;letter-spacing:.06em;margin-bottom:12px}
+.footer-brand small{display:block;font:600 8px Inter,sans-serif;letter-spacing:.24em;color:var(--accent-light);margin-top:4px;opacity:.8}
+.footer-desc{font-size:14px;line-height:1.7;margin-bottom:24px;max-width:300px}
+.footer-social{display:flex;gap:12px}
+.footer-social a{width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.15);display:grid;place-items:center;font-size:18px;transition:all .2s}
+.footer-social a:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);transform:translateY(-2px)}
+.footer-col h4{color:#fff;font-size:14px;font-weight:600;margin:0 0 16px;text-transform:uppercase;letter-spacing:.1em}
+.footer-col a{display:block;color:rgba(255,255,255,.6);font-size:14px;margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:#fff}
+.footer-bottom{max-width:1280px;margin:40px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.footer-bottom a{color:rgba(255,255,255,.5)}
+
+/* Portfolio Grid & Carousel */
+.portfolio-grid-new{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1280px;margin:auto;padding:0 24px}
+.portfolio-grid-new .carousel-slide{position:relative;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow);background:var(--paper);cursor:pointer;transition:transform .3s,box-shadow .3s}
+.portfolio-grid-new .carousel-slide:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.portfolio-grid-new .carousel-slide::before{content:"";display:block;padding-top:133%}
+.portfolio-grid-new .carousel-slide img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.portfolio-grid-new .carousel-slide:hover img{transform:scale(1.05)}
+.portfolio-grid-new .carousel-slide .label{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(37,33,32,.7),transparent);z-index:2}
+.portfolio-grid-new .carousel-slide .label strong{color:#fff;font-size:15px;display:block;margin-bottom:4px}
+.portfolio-grid-new .carousel-slide .label span{color:rgba(255,255,255,.85);font-size:12px}
+
+.carousel-section{padding:80px 0;overflow:hidden}
+.carousel-container{position:relative;max-width:1280px;margin:auto;padding:0 24px}
+.carousel-track-wrapper{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory;scroll-behavior:smooth;border-radius:var(--radius);scrollbar-width:none;-ms-overflow-style:none;cursor:grab;position:relative}
+.carousel-track-wrapper::-webkit-scrollbar{display:none}
+.carousel-track-wrapper:active{cursor:grabbing}
+.carousel-track{display:flex;gap:16px;padding:4px}
+.carousel-slide{flex:0 0 85%;position:relative;border-radius:var(--radius-sm);overflow:hidden;scroll-snap-align:start;box-shadow:var(--shadow);background:var(--paper);cursor:pointer}
+.carousel-slide::before{content:"";display:block;padding-top:133%}
+.carousel-slide img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.carousel-slide:hover img{transform:scale(1.05)}
+.carousel-slide .label{position:absolute;bottom:0;left:0;right:0;padding:20px;background:linear-gradient(to top,rgba(37,33,32,.7),transparent);z-index:2}
+.carousel-slide .label strong{color:#fff;font-size:15px;display:block;margin-bottom:4px}
+.carousel-slide .label span{color:rgba(255,255,255,.85);font-size:12px}
+
+.carousel-arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);display:grid;place-items:center;font-size:20px;cursor:pointer;transition:all .2s;z-index:10;box-shadow:var(--shadow)}
+.carousel-arrow:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.carousel-arrow:disabled{opacity:.35;cursor:not-allowed}
+.carousel-arrow.prev{left:8px}
+.carousel-arrow.next{right:8px}
+.carousel-progress{height:3px;background:var(--line);border-radius:2px;margin:24px auto 0;max-width:200px;overflow:hidden}
+.carousel-progress-bar{height:100%;background:var(--accent);border-radius:2px;transition:width .4s ease}
+
+/* Exit Intent Modal */
+.exit-modal{position:fixed;inset:0;z-index:300;display:none;place-items:center;opacity:0;transition:opacity .3s}
+.exit-modal.active{display:grid;opacity:1}
+.exit-modal-backdrop{position:absolute;inset:0;background:rgba(37,33,32,.6);backdrop-filter:blur(4px)}
+.exit-modal-content{position:relative;background:var(--paper);border-radius:var(--radius);padding:40px;max-width:420px;width:90%;text-align:center;box-shadow:var(--shadow-lg);z-index:1;animation:slideUp .4s ease}
+.exit-modal-close{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);font-size:24px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.exit-modal-close:hover{background:var(--soft);color:var(--ink)}
+.exit-modal-emoji{font-size:48px;margin-bottom:16px}
+.exit-modal h3{font:400 24px "Playfair Display",Georgia,serif;margin:0 0 12px}
+.exit-modal p{color:var(--muted);margin:0 0 20px;line-height:1.6}
+.exit-modal-countdown{background:var(--soft);color:var(--accent);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:600;margin-bottom:20px;display:inline-block}
+
+/* Lightbox */
+.lightbox{position:fixed;inset:0;background:rgba(37,33,32,.92);z-index:200;display:none;place-items:center;opacity:0;transition:opacity .3s}
+.lightbox.active{display:grid;opacity:1}
+.lightbox-img{max-width:90vw;max-height:85vh;object-fit:contain;border-radius:var(--radius-sm);box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.lightbox-close{position:absolute;top:24px;right:24px;width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:28px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.lightbox-close:hover{background:rgba(255,255,255,.2)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:all .2s}
+.lightbox-nav:hover{background:rgba(255,255,255,.2)}
+.lightbox-nav.prev{left:24px}
+.lightbox-nav.next{right:24px}
+.lightbox-caption{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);color:#fff;text-align:center}
+.lightbox-caption strong{display:block;font-size:16px;margin-bottom:4px}
+.lightbox-caption span{font-size:13px;color:rgba(255,255,255,.7)}
+
+/* Hide/show utility */
+.public.hide{display:none}
+.booking-step.hide{display:none}
+
+/* Responsive */
+@media(max-width:1024px){
+  .about-grid{grid-template-columns:1fr;gap:40px}
+  .about-img{max-width:400px;margin:auto}
+  .location-grid{grid-template-columns:1fr;gap:40px}
+  .footer-inner{grid-template-columns:1fr 1fr}
+  .portfolio-grid-new{display:none}
+  .carousel-section .carousel-container{display:block}
+  .carousel-slide{flex:0 0 calc(50% - 8px)}
+}
+@media(max-width:768px){
+  .services-grid{grid-template-columns:1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .instagram-grid{grid-template-columns:repeat(3,1fr)}
+  .booking-section{padding:32px 24px;margin-top:40px}
+  .choices{grid-template-columns:1fr}
+  .steps{flex-direction:column;align-items:center;gap:6px;margin-bottom:24px}
+  .step{width:100%;max-width:280px;padding:10px 14px}
+  .times{grid-template-columns:repeat(3,1fr)}
+  .date-row{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr;gap:32px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .carousel-section{padding:60px 0}
+  .carousel-slide{flex:0 0 85%}
+  .carousel-track{gap:12px}
+  .carousel-arrow{width:40px;height:40px;font-size:16px}
+}
+@media(max-width:480px){
+  .about-stats{grid-template-columns:1fr}
+  .times{grid-template-columns:repeat(2,1fr)}
+  .carousel-slide{flex:0 0 90%}
+}
+@media(min-width:1025px){
+  .carousel-section .carousel-track-wrapper{display:none}
+  .carousel-section .carousel-arrow{display:none}
+  .carousel-section .carousel-progress{display:none}
+}
+</style>
+
+<script>
+// ===== MOBILE MENU =====
+function toggleMobileMenu(){const nav=document.getElementById('mainNav'),btn=document.querySelector('.mobile-menu-btn');const isOpen=nav.classList.toggle('open');btn.classList.toggle('active');btn.setAttribute('aria-expanded',String(isOpen))}
+function closeMobileMenu(){document.getElementById('mainNav').classList.remove('open');const btn=document.querySelector('.mobile-menu-btn');btn.classList.remove('active');btn.setAttribute('aria-expanded','false')}
+
+// ===== HEADER SHADOW =====
+window.addEventListener('scroll',()=>{document.getElementById('mainHeader').classList.toggle('scrolled',window.scrollY>10)});
+
+// ===== SCROLL REVEAL =====
+const revealObserver=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');revealObserver.unobserve(e.target)}})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+
+// ===== PARALLAX HERO =====
+window.addEventListener('scroll',()=>{
+  const heroWrap=document.querySelector('.hero-visual');
+  if(heroWrap){const y=window.scrollY*.12;heroWrap.style.transform=`translateY(${y}px)`}
+});
+
+// ===== URGENCY COUNTDOWN =====
+(function(){
+  let h=4,m=32,s=18;
+  const eh=document.getElementById('countdownH'),em=document.getElementById('countdownM'),es=document.getElementById('countdownS');
+  if(!eh)return;
+  setInterval(()=>{
+    if(s>0){s--}else if(m>0){m--;s=59}else if(h>0){h--;m=59;s=59}
+    eh.textContent=String(h).padStart(2,'0');
+    em.textContent=String(m).padStart(2,'0');
+    es.textContent=String(s).padStart(2,'0');
+  },1000);
+})();
+
+// ===== EXIT INTENT MODAL =====
+(function(){
+  const modal=document.getElementById('exitModal');
+  let shown=false;
+  function showExitModal(){if(shown||modal.classList.contains('active'))return;shown=true;modal.classList.add('active');document.body.style.overflow='hidden';}
+  function handleMouse(e){if(e.clientY<10&&e.relatedTarget===null){showExitModal()}}
+  document.addEventListener('mouseout',handleMouse);
+  // Mobile: show after 30s if not booked
+  setTimeout(()=>{if(!shown)showExitModal()},45000);
+  // Exit countdown
+  let em=5,es=0;
+  const ec=document.getElementById('exitCountdown');
+  if(ec){
+    setInterval(()=>{
+      if(es>0){es--}else if(em>0){em--;es=59}
+      ec.textContent=String(em).padStart(2,'0')+':'+String(es).padStart(2,'0');
+    },1000);
+  }
+})();
+function closeExitModal(){document.getElementById('exitModal').classList.remove('active');document.body.style.overflow='';}
+
+// ===== SOCIAL PROOF TOASTS =====
+(function(){
+  const container=document.getElementById('toastContainer');
+  if(!container)return;
+  const toasts=[
+    {name:'Camille D.',action:'vient de réserver une Pose complète',time:'Il y a 2 min',img:'assets/sandra-portrait.jpg'},
+    {name:'Julie M.',action:'a pris rendez-vous pour demain',time:'Il y a 5 min',img:'assets/sandra-portrait.jpg'},
+    {name:'Sophie L.',action:'a laissé un avis 5 étoiles',time:'Il y a 12 min',img:'assets/sandra-portrait.jpg'},
+    {name:'Emma R.',action:'vient de réserver une French',time:'Il y a 18 min',img:'assets/sandra-portrait.jpg'},
+    {name:'Laura B.',action:'a consulté les disponibilités',time:'Il y a 25 min',img:'assets/sandra-portrait.jpg'}
+  ];
+  let idx=0;
+  function showToast(){
+    const t=toasts[idx%toasts.length];
+    const el=document.createElement('div');
+    el.className='toast';
+    el.innerHTML=`<img src="${t.img}" alt=""><div><strong>${t.name}</strong><span>${t.action}</span></div><span class="time-ago">${t.time}</span>`;
+    container.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('show'));
+    setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),500)},5000);
+    idx++;
+  }
+  // First toast after 8s, then every 20s
+  setTimeout(showToast,8000);
+  setInterval(showToast,20000);
+})();
+
+// ===== EXISTING BOOKING LOGIC (PRESERVED) =====
+const BOOKING_DURATION_MINUTES=120;
+const services=[['Manucure H/F sans VSP',25,false],['Pose complète chablon',85,true],['Pose complète capsule',70,true],['Remplissage',65,true],['Gainage',50,true],['Pose VSP simple',45,false],['Pédicure H/F sans VSP',25,false],['Vernis semi-permanent pieds',60,false]];
+const state={service:null,date:null,time:null};
+const totalDuration=()=>BOOKING_DURATION_MINUTES;
+const priceLabel=()=>state.service?`${state.service.from?'Dès ':''}${state.service.price} CHF`:'';
+const serviceName=()=>state.service?.name||'';
+
+function renderServices(){
+  const w=document.getElementById('serviceChoices');
+  w.innerHTML='';
+  services.forEach((s,i)=>{
+    const selected=state.service?.i===i,b=document.createElement('button');
+    b.type='button';
+    b.className='choice'+(selected?' selected':'');
+    b.innerHTML=`<strong>${s[0]}</strong><span>${s[2]?'Dès ':''}${s[1]} CHF</span>`;
+    b.onclick=()=>selectService(i);
+    w.appendChild(b)
+  });
+  const summary=document.getElementById('selectionSummary');
+  document.getElementById('continueServices').disabled=!state.service;
+  if(!state.service){
+    summary.innerHTML='<div class="selection-count">Aucune prestation sélectionnée</div>Choisissez une prestation.';
+    return
+  }
+  summary.innerHTML=`<div class="selection-count">Prestation sélectionnée</div><strong>${state.service.name}</strong><br>${priceLabel()}`
+}
+function selectService(i){
+  const s=services[i];
+  state.service={i,name:s[0],price:s[1],from:s[2]};
+  state.time=null;
+  renderServices()
+}
+function showPublic(id,button){
+  document.querySelectorAll('.public').forEach(s=>s.classList.add('hide'));
+  document.getElementById(id).classList.remove('hide');
+  document.querySelectorAll('.nav button').forEach(b=>{b.classList.remove('active');b.removeAttribute('aria-current')});
+  const b=button||document.querySelector(`.nav button[data-page="${id}"]`);
+  if(b){b.classList.add('active');b.setAttribute('aria-current','page')}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goToStep(step){
+  if(step===2&&!state.service)return;
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.booking-step').forEach(s=>s.classList.add('hide'));
+  if(step===1){
+    document.getElementById('bookingStep1').classList.remove('hide');
+    renderServices()
+  }
+  if(step===2){
+    document.getElementById('bookingStep2').classList.remove('hide');
+    document.getElementById('serviceSummary').innerHTML=`<strong>${serviceName()}</strong><br>${priceLabel()}`;
+    setDateMin();
+    loadAvailability()
+  }
+  if(step===3){
+    if(!state.date||!state.time)return;
+    document.getElementById('bookingStep3').classList.remove('hide');
+    document.getElementById('finalSummary').innerHTML=`<strong>${serviceName()}</strong><br>${formatDate(state.date)} à ${formatTime(state.time)}<br>${priceLabel()}`
+  }
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('stepLabel'+step).classList.add('active')
+}
+function setDateMin(){
+  const input=document.getElementById('bookingDate'),d=new Date(),local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  input.min=local;
+  if(!input.value)input.value=local;
+  state.date=input.value
+}
+async function loadAvailability(){
+  const input=document.getElementById('bookingDate'),wrap=document.getElementById('timeSlots'),status=document.getElementById('availabilityStatus');
+  state.date=input.value;
+  state.time=null;
+  document.getElementById('continueToContact').disabled=true;
+  wrap.innerHTML='';
+  if(!state.date||!state.service)return;
+  status.className='availability-status';
+  status.textContent='Vérification du calendrier de Sandra…';
+  try{
+    const r=await fetch(`/api/calendar?date=${encodeURIComponent(state.date)}&duration=${BOOKING_DURATION_MINUTES}`,{cache:'no-store'}),d=await r.json();
+    if(!r.ok)throw new Error();
+    status.textContent='';
+    if(!d.available?.length){
+      status.textContent='Aucun créneau n'est disponible à cette date.';
+      return
+    }
+    d.available.forEach(t=>{
+      const b=document.createElement('button');
+      b.className='time';
+      b.type='button';
+      b.textContent=formatTime(t);
+      b.onclick=()=>{
+        document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));
+        b.classList.add('selected');
+        state.time=t;
+        document.getElementById('continueToContact').disabled=false
+      };
+      wrap.appendChild(b)
+    })
+  }catch{
+    status.className='availability-status error';
+    status.textContent='Les disponibilités ne peuvent pas être chargées pour le moment.'
+  }
+}
+function formatDate(v){
+  return new Intl.DateTimeFormat('fr-CH',{weekday:'long',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date(v+'T12:00:00'))
+}
+function formatTime(v){
+  const p=String(v||'').match(/^(\d{1,2}):(\d{2})/);
+  return p?`${String(p[1]).padStart(2,'0')}:${p[2]}`:String(v||'')
+}
+async function confirmBooking(){
+  const first=document.getElementById('firstName').value.trim(),
+        last=document.getElementById('lastName').value.trim(),
+        email=document.getElementById('email').value.trim(),
+        phone=document.getElementById('phone').value.trim(),
+        note=document.getElementById('note').value.trim(),
+        err=document.getElementById('bookingError'),
+        btn=document.getElementById('confirmButton');
+  err.textContent='';
+  if(!first||!last||!email||!phone){
+    err.textContent='Merci de renseigner votre prénom, nom, e-mail et téléphone.';
+    return
+  }
+  if(!email.includes('@')){
+    err.textContent='Merci de renseigner une adresse e-mail valide.';
+    return
+  }
+  btn.disabled=true;
+  btn.textContent='Confirmation…';
+  try{
+    const r=await fetch('/api/calendar',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        service:serviceName(),
+        services:[{name:state.service.name,price:state.service.price,durationMinutes:BOOKING_DURATION_MINUTES,from:state.service.from}],
+        price:priceLabel(),
+        date:state.date,
+        time:state.time,
+        durationMinutes:BOOKING_DURATION_MINUTES,
+        customer:{firstName:first,lastName:last,email,phone},
+        note
+      })
+    }),d=await r.json();
+    if(r.status===409){
+      err.textContent=d.error||'Ce créneau n'est plus disponible.';
+      goToStep(2);
+      return
+    }
+    if(!r.ok)throw new Error();
+    document.getElementById('bookingStep3').classList.add('hide');
+    document.getElementById('bookingConfirmation').classList.remove('hide');
+    document.getElementById('confirmationText').innerHTML=`Merci ${first} !<br>Votre rendez-vous pour <strong>${serviceName()}</strong> est confirmé le <strong>${formatDate(state.date)}</strong> à <strong>${formatTime(state.time)}</strong>.`
+  }catch{
+    err.textContent='Impossible de confirmer le rendez-vous pour le moment. Merci de réessayer.'
+  }finally{
+    btn.disabled=false;
+    btn.textContent='Confirmer le rendez-vous'
+  }
+}
+function resetBooking(){
+  state.service=null;state.date=null;state.time=null;
+  ['firstName','lastName','email','phone','note'].forEach(id=>{
+    const e=document.getElementById(id);if(e)e.value=''
+  });
+  document.getElementById('bookingDate').value='';
+  document.getElementById('timeSlots').innerHTML='';
+  renderServices();
+  goToStep(1)
+}
+renderServices();
+showPublic('accueil');
+
+// ===== PORTFOLIO CAROUSEL =====
+(function(){
+  const wrapper = document.getElementById('carouselWrapper');
+  const track = document.getElementById('carouselTrack');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressBar = document.getElementById('progressBar');
+  if(!wrapper || !track) return;
+  const slides = track.querySelectorAll('.carousel-slide');
+  const totalSlides = slides.length;
+  let currentPage = 0;
+  function getSlidesPerView(){
+    const w = window.innerWidth;
+    if(w <= 480) return 1;
+    if(w <= 768) return 1;
+    if(w <= 1024) return 2;
+    return 3;
+  }
+  function getTotalPages(){return Math.ceil(totalSlides / getSlidesPerView());}
+  function updateProgress(){
+    const totalPages = getTotalPages();
+    const pct = totalPages > 1 ? ((currentPage + 1) / totalPages) * 100 : 100;
+    if(progressBar) progressBar.style.width = pct + '%';
+  }
+  function scrollToPage(page){
+    const totalPages = getTotalPages();
+    if(page < 0) page = 0;
+    if(page >= totalPages) page = totalPages - 1;
+    currentPage = page;
+    const slideIndex = page * getSlidesPerView();
+    if(slides[slideIndex]){
+      slides[slideIndex].scrollIntoView({behavior:'smooth',inline:'start',block:'nearest'});
+    }
+    updateButtons();
+    updateProgress();
+  }
+  function updateButtons(){
+    const totalPages = getTotalPages();
+    prevBtn.disabled = currentPage === 0;
+    nextBtn.disabled = currentPage >= totalPages - 1;
+  }
+  prevBtn.onclick = () => scrollToPage(currentPage - 1);
+  nextBtn.onclick = () => scrollToPage(currentPage + 1);
+  wrapper.addEventListener('scroll', () => {
+    const slideWidth = slides[0] ? slides[0].offsetWidth + 16 : 0;
+    if(slideWidth > 0){
+      currentPage = Math.round(wrapper.scrollLeft / slideWidth);
+      updateButtons();
+      updateProgress();
+    }
+  }, {passive: true});
+  wrapper.setAttribute('tabindex', '0');
+  wrapper.addEventListener('keydown', (e) => {
+    if(e.key === 'ArrowLeft') scrollToPage(currentPage - 1);
+    if(e.key === 'ArrowRight') scrollToPage(currentPage + 1);
+  });
+  window.addEventListener('resize', () => { updateButtons(); updateProgress(); });
+  updateButtons();
+  updateProgress();
+})();
+
+// ===== LIGHTBOX =====
+(function(){
+  const lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.id = 'lightbox';
+  lightbox.innerHTML = `
+    <button class="lightbox-close" aria-label="Fermer">&times;</button>
+    <button class="lightbox-nav prev" aria-label="Précédent">&#x2039;</button>
+    <img class="lightbox-img" src="" alt="">
+    <button class="lightbox-nav next" aria-label="Suivant">&#x203A;</button>
+    <div class="lightbox-caption"><strong></strong><span></span></div>
+  `;
+  document.body.appendChild(lightbox);
+  const lbImg = lightbox.querySelector('.lightbox-img');
+  const lbClose = lightbox.querySelector('.lightbox-close');
+  const lbPrev = lightbox.querySelector('.lightbox-nav.prev');
+  const lbNext = lightbox.querySelector('.lightbox-nav.next');
+  const lbCapStrong = lightbox.querySelector('.lightbox-caption strong');
+  const lbCapSpan = lightbox.querySelector('.lightbox-caption span');
+  const allSlides = document.querySelectorAll('.carousel-slide');
+  let currentIdx = 0;
+  function openLightbox(idx){
+    currentIdx = idx;
+    const slide = allSlides[idx];
+    if(!slide) return;
+    const img = slide.querySelector('img');
+    const title = slide.querySelector('.label strong')?.textContent || '';
+    const desc = slide.querySelector('.label span')?.textContent || '';
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lbCapStrong.textContent = title;
+    lbCapSpan.textContent = desc;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  function nextImage(){
+    currentIdx = (currentIdx + 1) % allSlides.length;
+    openLightbox(currentIdx);
+  }
+  function prevImage(){
+    currentIdx = (currentIdx - 1 + allSlides.length) % allSlides.length;
+    openLightbox(currentIdx);
+  }
+  allSlides.forEach((slide, i) => {
+    slide.addEventListener('click', () => openLightbox(i));
+  });
+  lbClose.addEventListener('click', closeLightbox);
+  lbNext.addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+  lbPrev.addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => {
+    if(!lightbox.classList.contains('active')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowRight') nextImage();
+    if(e.key === 'ArrowLeft') prevImage();
+  });
+})();
+</script>
+</body>
+</html>
