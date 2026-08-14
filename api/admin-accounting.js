@@ -5,7 +5,7 @@ import { getDb } from '../lib/db.js';
 
 function json(res,status,body){res.setHeader('Content-Type','application/json; charset=utf-8');res.setHeader('Cache-Control','no-store');return res.status(status).json(body)}
 function validDate(v){return /^\d{4}-\d{2}-\d{2}$/.test(String(v||''))}
-function csvCell(v){const s=String(v??'');return /[;"\n\r]/.test(s)?`"${s.replace(/"/g,'""')}"`:s}
+function csvCell(v){let s=String(v??'');if(/^[=+\-@\t\r]/.test(s))s=`'${s}`;return /[;"\n\r]/.test(s)?`"${s.replace(/"/g,'""')}"`:s}
 function monthBounds(value){const m=String(value||'').match(/^(\d{4})-(\d{2})$/);if(!m)throw new Error('MONTH_INVALID');const y=Number(m[1]),mo=Number(m[2]);if(mo<1||mo>12)throw new Error('MONTH_INVALID');return{start:`${m[1]}-${m[2]}-01`,nextMonth:mo===12?`${y+1}-01-01`:`${y}-${String(mo+1).padStart(2,'0')}-01`,year:y}}
 function yearBounds(value){const y=Number(value);if(!Number.isInteger(y)||y<2000||y>2200)throw new Error('YEAR_INVALID');return{start:`${y}-01-01`,nextYear:`${y+1}-01-01`,year:y}}
 async function snapshot(sql,id){const a=await sql`SELECT a.*,COALESCE(json_agg(json_build_object('id',i.id,'name',i.item_name,'amount_cents',i.amount_cents,'quantity',i.quantity,'source',i.source) ORDER BY i.id) FILTER (WHERE i.id IS NOT NULL),'[]'::json) items FROM appointments_accounting a LEFT JOIN appointment_items i ON i.appointment_accounting_id=a.id WHERE a.id=${id} GROUP BY a.id`;return a[0]||null}

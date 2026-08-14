@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import { sendGmailToSelf } from '../lib/gmail.js';
 import { getDb } from '../lib/db.js';
+import { findService, formatPrice } from '../lib/services.js';
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 const CALENDAR_API = 'https://www.googleapis.com/calendar/v3';
@@ -40,24 +41,28 @@ export default async function handler(req, res) {
     }
 
     const body = req.body || {};
-    const { service, price, date, time, durationMinutes, customer, note } = body;
+    const { service: serviceName, date, time, durationMinutes, customer, note } = body;
     const duration = Number(durationMinutes);
-    if (!service || !validDate(date) || !validTime(time) || !Number.isFinite(duration) || duration < 15 || !customer?.email || !customer?.firstName || !customer?.lastName || !customer?.phone) return json(res, 400, { error: 'Informations de réservation incomplètes.' });
+    if (!serviceName || !validDate(date) || !validTime(time) || !Number.isFinite(duration) || duration < 15 || !customer?.email || !customer?.firstName || !customer?.lastName || !customer?.phone) return json(res, 400, { error: 'Informations de réservation incomplètes.' });
+
+    const service = findService(serviceName);
+    if (!service) return json(res, 400, { error: 'Prestation inconnue.', code: 'UNKNOWN_SERVICE' });
+    const price = formatPrice(service);
 
     const start = zonedLocalToDate(date, time);
     const end = addMinutes(start, duration);
     const [busy,rules]=await Promise.all([getBusy(token, calendarId, date),getRules(date)]);
     if (!insideWeekly(date,time,duration,rules.weekly)||overlapsRecurring(date,time,duration,rules.recurring)||overlapsBusy(start,end,busy)) return json(res, 409, { error: 'Ce créneau n’est plus disponible. Merci d’en choisir un autre.', code: 'SLOT_UNAVAILABLE' });
 
-    const description = [`Cliente : ${customer.firstName} ${customer.lastName}`,`Téléphone : ${customer.phone}`,`E-mail : ${customer.email}`,price ? `Tarif : ${price}` : null,note ? `Note : ${note}` : null,'Réservation effectuée via nail-by-sandra-4fon.vercel.app'].filter(Boolean).join('\n');
-    const event = {summary: `Nail by Sandra — ${service}`,description,start: { dateTime: start.toISOString(), timeZone: TIME_ZONE },end: { dateTime: end.toISOString(), timeZone: TIME_ZONE }};
+    const description = [`Cliente : ${customer.firstName} ${customer.lastName}`,`Téléphone : ${customer.phone}`,`E-mail : ${customer.email}`,`Tarif : ${price}`,note ? `Note : ${note}` : null,'Réservation effectuée via nail-by-sandra-4fon.vercel.app'].filter(Boolean).join('\n');
+    const event = {summary: `Nail by Sandra — ${service.name}`,description,start: { dateTime: start.toISOString(), timeZone: TIME_ZONE },end: { dateTime: end.toISOString(), timeZone: TIME_ZONE }};
     const response = await fetch(`${CALENDAR_API}/calendars/${encodeURIComponent(calendarId)}/events`, {method: 'POST',headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },body: JSON.stringify(event)});
     const data = await response.json();
     if (!response.ok) throw new Error(`EVENT_${response.status}: ${data.error?.message || 'Impossible de créer le rendez-vous.'}`);
 
     let notificationSent=false;
     try {
-      const message=['Nouvelle réservation reçue 💅','',`Cliente : ${customer.firstName} ${customer.lastName}`,`Prestation : ${service}`,`Date : ${formatDateFr(start)}`,`Heure : ${time}`,price ? `Prix : ${price}` : null,`Téléphone : ${customer.phone}`,`E-mail : ${customer.email}`,note ? `Message : ${note}` : null,'','Le rendez-vous a été ajouté à ton calendrier.'].filter(Boolean).join('\n');
+      const message=['Nouvelle réservation reçue 💅','',`Cliente : ${customer.firstName} ${customer.lastName}`,`Prestation : ${service.name}`,`Date : ${formatDateFr(start)}`,`Heure : ${time}`,`Prix : ${price}`,`Téléphone : ${customer.phone}`,`E-mail : ${customer.email}`,note ? `Message : ${note}` : null,'','Le rendez-vous a été ajouté à ton calendrier.'].filter(Boolean).join('\n');
       await sendGmailToSelf({subject:`Nouveau rendez-vous — ${customer.firstName} ${customer.lastName}`,body:message});notificationSent=true;
     } catch (emailError) {console.error('Booking notification email:', emailError);}
     return json(res, 201, { success: true, eventId: data.id, htmlLink: data.htmlLink, notificationSent });
